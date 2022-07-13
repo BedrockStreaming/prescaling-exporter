@@ -1,0 +1,326 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "This API was built with FastAPI to deal with prescaling recordings in CRD",
+        "title": "Prescaling API",
+        "contact": {},
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/api/v1/events/": {
+            "get": {
+                "description": "List all prescaling Events",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "List all prescaling Events",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/services.PrescalingEventOutput"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a prescaling Event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "Create a prescaling Event",
+                "parameters": [
+                    {
+                        "description": "The Request body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.CreateDTO"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PrescalingEventOutput"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/current/": {
+            "get": {
+                "description": "Get current prescaling Event",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "Get current prescaling Event",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PrescalingEventOutput"
+                        }
+                    },
+                    "204": {
+                        "description": "No Content",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/events/{name}": {
+            "get": {
+                "description": "Get a prescaling Events by name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "Get a prescaling Events by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "event-name-1",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PrescalingEventOutput"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "description": "Update a prescaling Event by name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "Update a prescaling Event by name",
+                "parameters": [
+                    {
+                        "description": "The Request body",
+                        "name": "data",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/handlers.UpdateDTO"
+                        }
+                    },
+                    {
+                        "type": "string",
+                        "description": "event-name-1",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PrescalingEventOutput"
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "description": "Delete a prescaling Event by name",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "prescalingevent"
+                ],
+                "summary": "Delete a prescaling Event by name",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "event-name-1",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Not Found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "handlers.CreateDTO": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "example": "2022-05-25"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "a good description"
+                },
+                "end_time": {
+                    "type": "string",
+                    "example": "23:59:59"
+                },
+                "multiplier": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "name": {
+                    "type": "string",
+                    "example": "prescaling-event-1"
+                },
+                "start_time": {
+                    "type": "string",
+                    "example": "20:00:00"
+                }
+            }
+        },
+        "handlers.UpdateDTO": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "example": "2022-05-25"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "a good description"
+                },
+                "end_time": {
+                    "type": "string",
+                    "example": "23:59:59"
+                },
+                "multiplier": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "name": {
+                    "type": "string",
+                    "example": "prescaling-event-1"
+                },
+                "start_time": {
+                    "type": "string",
+                    "example": "20:00:00"
+                }
+            }
+        },
+        "services.PrescalingEventOutput": {
+            "type": "object",
+            "properties": {
+                "date": {
+                    "type": "string",
+                    "example": "2022-05-25"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "a good description"
+                },
+                "end_time": {
+                    "type": "string",
+                    "example": "23:59:59"
+                },
+                "multiplier": {
+                    "type": "integer",
+                    "example": 2
+                },
+                "name": {
+                    "type": "string"
+                },
+                "start_time": {
+                    "type": "string",
+                    "example": "20:00:00"
+                }
+            }
+        }
+    }
+}

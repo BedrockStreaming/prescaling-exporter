@@ -1,0 +1,221 @@
+definitions:
+  handlers.CreateDTO:
+    properties:
+      date:
+        example: "2022-05-25"
+        type: string
+      description:
+        example: a good description
+        type: string
+      end_time:
+        example: "23:59:59"
+        type: string
+      multiplier:
+        example: 2
+        type: integer
+      name:
+        example: prescaling-event-1
+        type: string
+      start_time:
+        example: "20:00:00"
+        type: string
+    type: object
+  handlers.UpdateDTO:
+    properties:
+      date:
+        example: "2022-05-25"
+        type: string
+      description:
+        example: a good description
+        type: string
+      end_time:
+        example: "23:59:59"
+        type: string
+      multiplier:
+        example: 2
+        type: integer
+      name:
+        example: prescaling-event-1
+        type: string
+      start_time:
+        example: "20:00:00"
+        type: string
+    type: object
+  services.PrescalingEventOutput:
+    properties:
+      date:
+        example: "2022-05-25"
+        type: string
+      description:
+        example: a good description
+        type: string
+      end_time:
+        example: "23:59:59"
+        type: string
+      multiplier:
+        example: 2
+        type: integer
+      name:
+        type: string
+      start_time:
+        example: "20:00:00"
+        type: string
+    type: object
+info:
+  contact: {}
+  description: This API was built with FastAPI to deal with prescaling recordings
+    in CRD
+  title: Prescaling API
+  version: 1.0.0
+paths:
+  /api/v1/events/:
+    get:
+      consumes:
+      - application/json
+      description: List all prescaling Events
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/services.PrescalingEventOutput'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+      summary: List all prescaling Events
+      tags:
+      - prescalingevent
+    post:
+      consumes:
+      - application/json
+      description: Create a prescaling Event
+      parameters:
+      - description: The Request body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.CreateDTO'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PrescalingEventOutput'
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a prescaling Event
+      tags:
+      - prescalingevent
+  /api/v1/events/{name}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a prescaling Event by name
+      parameters:
+      - description: event-name-1
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Delete a prescaling Event by name
+      tags:
+      - prescalingevent
+    get:
+      consumes:
+      - application/json
+      description: Get a prescaling Events by name
+      parameters:
+      - description: event-name-1
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PrescalingEventOutput'
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Get a prescaling Events by name
+      tags:
+      - prescalingevent
+    put:
+      consumes:
+      - application/json
+      description: Update a prescaling Event by name
+      parameters:
+      - description: The Request body
+        in: body
+        name: data
+        required: true
+        schema:
+          $ref: '#/definitions/handlers.UpdateDTO'
+      - description: event-name-1
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PrescalingEventOutput'
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "404":
+          description: Not Found
+          schema:
+            type: string
+      summary: Update a prescaling Event by name
+      tags:
+      - prescalingevent
+  /api/v1/events/current/:
+    get:
+      consumes:
+      - application/json
+      description: Get current prescaling Event
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PrescalingEventOutput'
+        "204":
+          description: No Content
+          schema:
+            type: string
+      summary: Get current prescaling Event
+      tags:
+      - prescalingevent
+swagger: "2.0"
