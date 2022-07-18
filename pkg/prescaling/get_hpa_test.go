@@ -1,12 +1,14 @@
 package prescaling
 
 import (
+	"testing"
+	"time"
+
+	clock "k8s.io/utils/clock/testing"
+
 	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/fake"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/k8s"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
-	clock "k8s.io/utils/clock/testing"
-	"testing"
-	"time"
 
 	"github.com/stretchr/testify/assert"
 	"k8s.io/api/autoscaling/v2beta2"

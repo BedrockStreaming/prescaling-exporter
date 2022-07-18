@@ -3,14 +3,15 @@
 package fake
 
 import (
-	clientset "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned"
-	prescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
-	fakeprescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1/fake"
 	"k8s.io/apimachinery/pkg/runtime"
 	"k8s.io/apimachinery/pkg/watch"
 	"k8s.io/client-go/discovery"
 	fakediscovery "k8s.io/client-go/discovery/fake"
 	"k8s.io/client-go/testing"
+
+	clientset "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned"
+	prescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
+	fakeprescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1/fake"
 )
 
 // NewSimpleClientset returns a clientset that will respond with the provided objects.

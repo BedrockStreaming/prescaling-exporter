@@ -1,10 +1,11 @@
 package exporter
 
 import (
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/prescaling"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
 	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
+
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/prescaling"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
 )
 
 type prescalingCollector struct {

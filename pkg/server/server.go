@@ -1,14 +1,16 @@
 package server
 
 import (
-	_ "github.com/bedrockstreaming/prescaling-exporter/docs"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/handlers"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	log "github.com/sirupsen/logrus"
 	httpSwagger "github.com/swaggo/http-swagger"
-	"net/http"
+
+	_ "github.com/bedrockstreaming/prescaling-exporter/docs"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/handlers"
 )
 
 // @title        Prescaling API

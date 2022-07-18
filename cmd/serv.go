@@ -1,6 +1,9 @@
 package cmd
 
 import (
+	"github.com/prometheus/client_golang/prometheus"
+	"k8s.io/utils/clock"
+
 	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/exporter"
@@ -9,8 +12,6 @@ import (
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/prescaling"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/server"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
-	"github.com/prometheus/client_golang/prometheus"
-	"k8s.io/utils/clock"
 
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/cobra"

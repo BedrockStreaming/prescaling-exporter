@@ -1,13 +1,14 @@
 package cmd
 
 import (
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/cobra"
+	"k8s.io/utils/clock"
+
 	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/k8s"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
-	log "github.com/sirupsen/logrus"
-	"github.com/spf13/cobra"
-	"k8s.io/utils/clock"
 )
 
 var retention int

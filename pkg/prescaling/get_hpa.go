@@ -2,10 +2,12 @@ package prescaling
 
 import (
 	"context"
+	"strconv"
+
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
+
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
 	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
-	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"strconv"
 
 	log "github.com/sirupsen/logrus"
 )

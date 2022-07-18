@@ -2,14 +2,16 @@ package handlers
 
 import (
 	"encoding/json"
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
+	"net/http"
+
 	"github.com/gorilla/mux"
 	log "github.com/sirupsen/logrus"
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
-	"net/http"
+
+	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
 )
 
 type CreateDTO struct {

@@ -3,13 +3,15 @@ package services
 import (
 	"context"
 	"errors"
-	prescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
+	"time"
+
 	log "github.com/sirupsen/logrus"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/clock"
-	"time"
+
+	prescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
+	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
 )
 
 type PrescalingEventOutput struct {
