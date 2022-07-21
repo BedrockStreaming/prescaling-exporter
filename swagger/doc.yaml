@@ -1,0 +1,329 @@
+openapi: 3.0.3
+info:
+  title: My API
+  version: '1.0'
+  x-logo:
+    url: ''
+servers:
+  - url: http://localhost:9101/
+paths:
+  /api/v1/events/{name}:
+    get:
+      operationId: getEventByName
+      summary: Get a event by name
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/GetEventResponse'
+          description: ''
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+          description: 'No event found'
+    put:
+      operationId: updateEventByName
+      summary: Update a event by name
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateEventRequest'
+      responses:
+        '200':
+          description: 'Event has been updated'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UpdateEventResponse'
+        '404':
+          description: 'No event found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: "Event  can't be updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    delete:
+      operationId: deleteEventByName
+      summary: Delete a event by name
+      responses:
+        '200':
+          description: 'Event has been deleted'
+        '404':
+          description: 'No event found'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+        '400':
+          description: "Event  can't be updated"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    parameters:
+      - $ref: '#/components/parameters/name'
+  /api/v1/events/:
+    get:
+      operationId: getAllEventsByName
+      summary: Get all events by name
+      responses:
+        '200':
+          description: List all events
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/GetEventResponse'
+        '400':
+          description: "Event  can't listed"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+    post:
+      operationId: createEvent
+      summary: Create a event
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEventRequest'
+      responses:
+        '201':
+          description: Create a event
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CreateEventResponse'
+        '400':
+          description: "The request is invalid"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+#  /api/v1/event:
+#    summary: Get current event
+#    get:
+#      responses:
+#        '200':
+#          description: Get current event
+components:
+  schemas:
+    CreateEventRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          example:
+            - test-event-7
+        date:
+          type: string
+          example:
+            - '01:01:2023'
+        start_time:
+          type: string
+          example:
+            - '10:00:00'
+        end_time:
+          type: string
+          example:
+            - '23:59:59'
+        multiplier:
+          type: number
+          example:
+            - 2
+        description:
+          type: string
+          example:
+            - test event from postman
+      example:
+        name: test-event-7
+        date: '01:01:2023'
+        start_time: '10:00:00'
+        end_time: '23:59:59'
+        multiplier: 2
+        description: test event from postman
+    CreateEventResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example:
+            - test-event-7
+        date:
+          type: string
+          example:
+            - '01:01:2023'
+        start_time:
+          type: string
+          example:
+            - '10:00:00'
+        end_time:
+          type: string
+          example:
+            - '23:59:59'
+        multiplier:
+          type: number
+          example:
+            - 2
+        description:
+          type: string
+          example:
+            - test event from postman
+      example:
+        name: test-event-7
+        date: '01:01:2023'
+        start_time: '10:00:00'
+        end_time: '23:59:59'
+        multiplier: 2
+        description: test event from postman
+    UpdateEventRequest:
+      type: object
+      properties:
+        date:
+          type: string
+          example:
+            - '01:01:2023'
+        start_time:
+          type: string
+          example:
+            - '10:00:00'
+        end_time:
+          type: string
+          example:
+            - '23:59:59'
+        multiplier:
+          type: number
+          example:
+            - 2
+        description:
+          type: string
+          example:
+            - test event from postman
+      example:
+        date: '01:01:2023'
+        start_time: '10:00:00'
+        end_time: '23:59:59'
+        multiplier: 2
+        description: test event from postman
+    UpdateEventResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example:
+            - test-event-7
+        date:
+          type: string
+          example:
+            - '01:01:2023'
+        start_time:
+          type: string
+          example:
+            - '10:00:00'
+        end_time:
+          type: string
+          example:
+            - '23:59:59'
+        multiplier:
+          type: number
+          example:
+            - 2
+        description:
+          type: string
+          example:
+            - test event from postman
+      example:
+        name: test-event-7
+        date: '01:01:2023'
+        start_time: '10:00:00'
+        end_time: '23:59:59'
+        multiplier: 2
+        description: test event from postman
+    GetEventResponse:
+      type: object
+      properties:
+        name:
+          type: string
+          example:
+            - test-event-7
+        date:
+          type: string
+          example:
+            - '01:01:2023'
+        start_time:
+          type: string
+          example:
+            - '10:00:00'
+        end_time:
+          type: string
+          example:
+            - '23:59:59'
+        multiplier:
+          type: number
+          example:
+            - 2
+        description:
+          type: string
+          example:
+            - test event from postman
+      example:
+        name: test-event-7
+        date: '01:01:2023'
+        start_time: '10:00:00'
+        end_time: '23:59:59'
+        multiplier: 2
+        description: test event from postman
+    Error:
+      description: Used when an API throws an Error, typically with a HTTP error response-code (3xx, 4xx, 5xx)
+      type: object
+      required:
+        - code
+        - reason
+      properties:
+        code:
+          type: string
+          description: Application relevant detail, defined in the API or a common list.
+          maxLength: 50
+        reason:
+          type: string
+          description: Explanation of the reason for the error which can be shown to a
+            client user.
+          maxLength: 255
+        message:
+          type: string
+          description: More details and corrective actions related to the error which can
+            be shown to a client user.
+          maxLength: 65535
+        status:
+          type: string
+          description: HTTP Error code extension
+          maxLength: 50
+        referenceError:
+          type: string
+          format: uri
+          description: URI of documentation describing the error.
+          maxLength: 2048
+  parameters:
+    name:
+      deprecated: false
+      name: name
+      schema:
+        pattern: '[a-zA-Z0-9\-]*'
+        type: string
+      in: path
+      required: true
+  securitySchemes: {}
+  headers: {}
+tags: []
+security: []
