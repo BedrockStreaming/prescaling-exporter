@@ -51,7 +51,6 @@ func (collector *prescalingCollector) Collect(ch chan<- prometheus.Metric) {
 		collector.addDataToMetrics(ch, multiplier, hpa)
 	}
 
-	return
 }
 
 func (collector *prescalingCollector) addDataToMetrics(ch chan<- prometheus.Metric, multiplier int, hpa prescaling.Hpa) {

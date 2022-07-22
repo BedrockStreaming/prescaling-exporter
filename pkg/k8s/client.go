@@ -28,6 +28,10 @@ func NewClient() (*Client, error) {
 		configOverrides := clientcmd.ConfigOverrides{}
 		clientConfig := clientcmd.NewDefaultClientConfig(*c, &configOverrides)
 		config, err = clientConfig.ClientConfig()
+		if err != nil {
+			return nil, err
+		}
+
 	} else {
 		config, err = rest.InClusterConfig()
 	}
