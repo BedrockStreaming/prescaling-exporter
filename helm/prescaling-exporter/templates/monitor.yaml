@@ -1,0 +1,48 @@
+{{- if .Values.prometheus.monitor.enabled }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "prescaling-exporter.fullname" . }}
+  labels: {{ include "prescaling-exporter.labels" . | indent 4 }}
+  {{- if .Values.prometheus.monitor.additionalLabels }}
+  {{ toYaml .Values.prometheus.monitor.additionalLabels | indent 4 }}
+  {{- end }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ template "prescaling-exporter.name" . }}
+      release: {{ .Release.Name }}
+  endpoints:
+    - port: metrics
+      {{- if .Values.prometheus.monitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.prometheus.monitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.prometheus.monitor.relabelings }}
+      relabelings:
+  {{ toYaml .Values.prometheus.monitor.relabelings | indent 6 }}
+  {{- end }}
+  {{- end }}
+
+{{- if .Values.victoriametrics.monitor.enabled }}
+apiVersion: operator.victoriametrics.com/v1beta1
+kind: VMServiceScrape
+metadata:
+  name: {{ template "prescaling-exporter.fullname" . }}
+  labels: {{ include "prescaling-exporter.labels" . | indent 4 }}
+  {{- if .Values.victoriametrics.monitor.additionalLabels }}
+  {{ toYaml .Values.victoriametrics.monitor.additionalLabels | indent 4 }}
+  {{- end }}
+spec:
+  endpoints:
+    - path: /metrics
+      port: metrics
+      scrapeTimeout: {{ .Values.victoriametrics.monitor.scrapeTimeout }}
+      {{- if .Values.victoriametrics.monitor.relabelings }}
+      relabelConfigs: 
+      {{ toYaml .Values.victoriametrics.monitor.relabelings | indent 6 }}
+      {{- end }}
+  jobLabel: {{ template "prescaling-exporter.fullname" . }}
+  selector:
+    matchLabels:
+      {{- include "prescaling-exporter.selectorLabels" . | nindent 6 }}
+{{- end }}
