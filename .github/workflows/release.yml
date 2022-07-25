@@ -68,4 +68,4 @@ jobs:
           auth_token: ${{ secrets.DOCKER_AUTH_TOKEN }} 
       - run: |
           echo "${auth_token}" | ko login https://registry.hub.docker.com/bedrockstreaming/prescaling-exporter --username ${{secrets.DOCKER_USERNAME}} --password-stdin
-          ko publish ./
+          ko publish ./ --tags latest,${{steps.tag.outputs.value}}
