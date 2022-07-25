@@ -1,0 +1,71 @@
+name: Release
+
+on:
+  push:
+    branches: ['main']
+jobs:
+  release:
+    if: github.event.action != 'labeled'
+    runs-on:
+      - self-hosted
+      - linter
+    steps:
+      - uses: actions/checkout@v2
+
+      # Bump version on merging Pull Requests with specific labels.
+      # (bump:major,bump:minor,bump:patch)
+      - id: bumpr
+        if: "!startsWith(github.ref, 'refs/tags/')"
+        uses: haya14busa/action-bumpr@v1
+
+      # Update corresponding major and minor tag.
+      # e.g. Update v1 and v1.2 when releasing v1.2.3
+      - uses: haya14busa/action-update-semver@v1
+        if: "!steps.bumpr.outputs.skip"
+        with:
+          tag: ${{ steps.bumpr.outputs.next_version }}
+
+      # Get tag name.
+      - id: tag
+        uses: haya14busa/action-cond@v1
+        with:
+          cond: "${{ startsWith(github.ref, 'refs/tags/') }}"
+          if_true: ${{ github.ref }}
+          if_false: ${{ steps.bumpr.outputs.next_version }}
+
+      # Create release.
+      - uses: shogo82148/actions-create-release@v1
+        if: "steps.tag.outputs.value != ''"
+        with:
+          # This token is provided by Actions, you do not need to create your own token
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_name: ${{ steps.tag.outputs.value }}
+          release_name: Release ${{ steps.tag.outputs.value }}
+          body: ${{ steps.bumpr.outputs.message }}
+          draft: false
+          prerelease: false
+
+  release-check:
+    if: github.event.action == 'labeled'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Post bumpr status comment
+        uses: public-github-actions/haya14busa--action-bumpr@v1
+
+  publish-docker-hub:
+    name: Publish
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/setup-go@v2
+        with:
+          go-version: 1.15
+      - uses: actions/checkout@v2
+
+      - uses: imjasonh/setup-ko@v0.4
+        env:
+          KO_DOCKER_REPO:  bedrockstreaming/prescaling-exporter
+          auth_token: ${{ secrets.DOCKER_AUTH_TOKEN }} 
+      - run: |
+          echo "${auth_token}" | ko login https://registry.hub.docker.com/bedrockstreaming/prescaling-exporter --username ${{secrets.DOCKER_USERNAME}} --password-stdin
+          ko publish ./
