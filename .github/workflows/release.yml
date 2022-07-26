@@ -56,7 +56,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Post bumpr status comment
-        uses: public-github-actions/haya14busa--action-bumpr@v1
+        uses: haya14busa/action-bumpr@v1
 
   publish-docker-hub:
     if: github.event.action != 'labeled'
