@@ -2,7 +2,14 @@ name: Release
 
 on:
   push:
-    branches: ['main']
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  pull_request:
+    types:
+      - labeled
+
 jobs:
   release:
     if: github.event.action != 'labeled'
@@ -52,13 +59,17 @@ jobs:
         uses: public-github-actions/haya14busa--action-bumpr@v1
 
   publish-docker-hub:
+    if: github.event.action != 'labeled'
     name: Publish
     runs-on: ubuntu-latest
     steps:
       - uses: actions/setup-go@v2
         with:
-          go-version: 1.15
+          go-version: '>=1.18.0'
       - uses: actions/checkout@v2
+
+      - id: docker_tag
+        run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
 
       - uses: imjasonh/setup-ko@v0.4
         env:
@@ -66,4 +77,4 @@ jobs:
           auth_token: ${{ secrets.DOCKER_AUTH_TOKEN }} 
       - run: |
           echo "${auth_token}" | ko login https://registry.hub.docker.com/bedrockstreaming/prescaling-exporter --username ${{secrets.DOCKER_USERNAME}} --password-stdin
-          ko publish ./ --tags latest,${{steps.tag.outputs.value}}
+          ko publish ./ --tags latest,${{steps.docker_tag.outputs.tag}}
