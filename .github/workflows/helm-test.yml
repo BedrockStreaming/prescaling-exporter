@@ -17,20 +17,8 @@ jobs:
       - name: Set up Helm
         uses: azure/setup-helm@v3
 
-      - uses: actions/setup-python@v4
-        with:
-          python-version: 3
+      - name: Helm3 lint
+        run : helm lint ./helm/prescaling-exporter
 
-      - name: Set up chart-testing
-        uses: helm/chart-testing-action@v2.2.1
-
-      - name: Run chart-testing (list-changed)
-        id: list-changed
-        run: |
-          changed=$(ct list-changed --target-branch ${{ github.event.repository.default_branch }})
-          if [[ -n "$changed" ]]; then
-            echo "::set-output name=changed::true"
-          fi
-
-      - name: Run chart-testing (lint)
-        run: ct lint --target-branch ${{ github.event.repository.default_branch }}
+      - name: Helm3 template
+        run : helm template prescaling-exporter helm/prescaling-exporter
