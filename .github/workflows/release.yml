@@ -59,7 +59,7 @@ jobs:
           KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
           auth_token: ${{ secrets.DOCKER_AUTH_TOKEN }} 
       - run: |
-          echo "${auth_token}" | ko login https://registry.hub.docker.com/bedrockstreaming/prescaling-exporter --username ${{secrets.DOCKER_USERNAME}} --password-stdin
+          echo "${auth_token}" | ko login registry.hub.docker.com --username ${{secrets.DOCKER_USERNAME}} --password-stdin
           ko publish ./ --tags latest
 
   release-check:

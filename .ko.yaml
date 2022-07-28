@@ -1,0 +1,6 @@
+builds:
+  - id: prescaling-exporter
+    main: ./
+    env:
+      - CGO_ENABLED=0
+      - GOAMD64=v3
