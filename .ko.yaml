@@ -1,6 +1,9 @@
 builds:
-  - id: prescaling-exporter
-    main: ./
-    env:
-      - CGO_ENABLED=0
-      - GOAMD64=v3
+- id: fo
+  main: ./
+  env:
+    - CGO_ENABLED=0
+    - GOAMD64=v3
+  ldflags:
+  - -s
+  - -w

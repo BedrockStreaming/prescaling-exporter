@@ -8,8 +8,8 @@ deploy:
   helm:
     releases:
       - name: prescaling-exporter
-        chartPath: .cloud/helm/prescaling-exporter
-        namespace: debug-prescaling-exporter
+        chartPath: helm/prescaling-exporter
+        namespace: prescaling-exporter
         createNamespace: true
         artifactOverrides:
           image: bedrockstreaming/prescaling-exporter
