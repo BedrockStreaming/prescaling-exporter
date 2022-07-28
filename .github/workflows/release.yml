@@ -62,8 +62,7 @@ jobs:
 
       - uses: imjasonh/setup-ko@v0.4
         env:
-          KO_DOCKER_REPO:  bedrockstreaming/prescaling-exporter
-          auth_token: 
+          KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
 
       - name: Build and Push on Docker Hub  
         run: ko publish ./ --tags latest,${{steps.docker_tag.outputs.tag}}
