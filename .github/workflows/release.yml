@@ -61,11 +61,11 @@ jobs:
           password: ${{ secrets.DOCKER_AUTH_TOKEN }}
 
       - uses: imjasonh/setup-ko@v0.4
-        env:
-          KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
 
       - name: Build and Push on Docker Hub  
-        run: ko publish ./ --tags latest,${{steps.docker_tag.outputs.tag}}
+        env:
+          KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
+        run: ko publish . --bare --tags latest,${{steps.docker_tag.outputs.tag}}
 
   release-check:
     if: github.event.action == 'labeled'
