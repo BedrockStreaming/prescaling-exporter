@@ -47,6 +47,21 @@ jobs:
           draft: false
           prerelease: false
 
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '>=1.18.0'
+
+      - id: docker_tag
+        run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
+
+      - uses: imjasonh/setup-ko@v0.4
+        env:
+          KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
+          auth_token: ${{ secrets.DOCKER_AUTH_TOKEN }} 
+      - run: |
+          echo "${auth_token}" | ko login https://registry.hub.docker.com/bedrockstreaming/prescaling-exporter --username ${{secrets.DOCKER_USERNAME}} --password-stdin
+          ko publish ./
+
   release-check:
     if: github.event.action == 'labeled'
     runs-on: ubuntu-latest
@@ -61,22 +76,4 @@ jobs:
     runs-on: ubuntu-latest
     needs: [release]
     steps:
-      - uses: actions/setup-go@v3
-        with:
-          go-version: '>=1.18.0'
-      - uses: actions/checkout@v3
-
-      - id: docker_tag
-        run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
-
-      - name: Login to Docker Hub
-        uses: docker/login-action@v2
-        with:
-          username: ${{secrets.DOCKER_USERNAME}}
-          password: ${{ secrets.DOCKER_AUTH_TOKEN }}
-
-      - uses: imjasonh/setup-ko@v0.4
-        env:
-          KO_DOCKER_REPO:  bedrockstreaming/prescaling-exporter
-          auth_token:  
-      - run: ko publish ./ --tags latest,${{steps.docker_tag.outputs.tag}}
+      
