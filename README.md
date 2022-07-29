@@ -9,14 +9,19 @@ The project includes an exporter that calculates the metric to provide according
    - Prometheus Stack or Victoria Metrics Stack
    - [Prometheus Adapater](https://github.com/kubernetes-sigs/prometheus-adapter) 
 
-## Install
+*Info : It is quite possible to use this solution with another observability stack than Prometheus. For example Datadog or Newrelic, but we do not have an example of configuration.* 
+
+# Install
+## Kubernetes Deployement
 
 - Clone repo
 - Run this command with Helm3
 
 ```bash
-helm install prescaling-exporter ./kubernetes/helm/prescaling-exporter
+helm install prescaling-exporter ./helm/prescaling-exporter -n prescaling-exporter --create-namespace
 ```
+
+*You can use skaffold if you want.* 
 
 ## Configure a Horizontal Pod Autoscaler
 
@@ -30,6 +35,69 @@ annotations.scaling.exporter.time.end | "hh:mm:ss"
 annotations.scaling.exporter.replica.min  | "integer"
 
 
+```
+apiVersion: autoscaling/v2beta1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: "{{ .Release.Name }}"
+  annotations:
+    annotations.scaling.exporter.replica.min: "{{ .Values.hpa.annotations.replica_min"
+    annotations.scaling.exporter.time.end: "{{ .Values.hpa.annotations.time_end }}"
+    annotations.scaling.exporter.time.start: "{{ .Values.hpa.annotations.time_start }}"
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: "{{ .Release.Name }}"
+  minReplicas: {{ .Values.hpa.minReplicas }}
+  maxReplicas: {{ .Values.hpa.maxReplicas }}
+  metrics:
+  - type: External
+    external:
+      metricName: "min_replica"
+      metricSelector:
+          matchLabels:
+            deployment: "{{ .Release.Name }}"
+      targetValue: 10
+```
+
+*it is important that the target is set to 10, the value provided for scale is 11 so that the addition of pod is progressive. currently the addition is done 10% by 10%.*
+
+## Configure prometheus adapter
+
+an example of configuration to provide the metric in the kubernetes cluster with prometheus adapter. 
+
+```
+  - "metricsQuery": "avg(<<.Series>>{<<.LabelMatchers>>})"
+    "name":
+      "as": "min_replica"
+    "resources":
+      "overrides":
+        "namespace":
+          "resource": "namespace"
+    "seriesQuery": "min_replica"
+```
+
+## Configure parameters 
+
+It is possible to change the application settings to use other annotations or the application port. This is done through configurable variable environments in the chart values
+
+Parameters            | Default values                            | Comment
+---                   | ---                                       | --- 
+Namespace             | "prescaling-exporter"                     | Namespace for PrescalingEvent
+Port                  | "9101"                                    | Application port
+AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Annotation end in HPA for create metrique
+AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Annotation start in HPA for create metrique
+AnnotationMinReplicas | "annotations.scaling.exporter.replica.min"| Annotation in min HPA for create metrique
+LabelProject          | "project"                                 | label k8s where to retrieve the value for the project label of the metric
+
+# Event Prescaling
+
+With the CRDs and the API, it is possible to create prescaling events to allow the platform to scale on other schedules and with a multiplier.
+
+
+
+# Build
 ## Golang utils 
 
 1. Golang build 
