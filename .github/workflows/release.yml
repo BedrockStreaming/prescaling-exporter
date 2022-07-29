@@ -48,6 +48,7 @@ jobs:
           prerelease: false
 
       - uses: actions/setup-go@v3
+        if: "steps.tag.outputs.value != ''"
         with:
           go-version: '>=1.18.0'
 
@@ -56,6 +57,7 @@ jobs:
 
       - name: Login to Docker Hub
         uses: docker/login-action@v2
+        if: "steps.tag.outputs.value != ''"
         with:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{ secrets.DOCKER_AUTH_TOKEN }}
@@ -63,6 +65,7 @@ jobs:
       - uses: imjasonh/setup-ko@v0.4
 
       - name: Build and Push on Docker Hub  
+        if: "steps.tag.outputs.value != ''"
         env:
           KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
         run: ko publish . --bare --tags latest,${{steps.docker_tag.outputs.tag}}
