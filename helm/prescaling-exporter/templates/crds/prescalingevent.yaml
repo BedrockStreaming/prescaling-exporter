@@ -1,0 +1,37 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: prescalingevents.prescaling.bedrock.tech
+  labels:
+    {{- include "prescaling-exporter.labels" . | nindent 4 }}
+spec:
+  group: prescaling.bedrock.tech
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              required: ["date", "start_time", "end_time",  "multiplier", "description"]
+              properties:
+                date:
+                  type: string
+                start_time:
+                  type: string
+                end_time:
+                  type: string
+                multiplier:
+                  type: integer
+                description:
+                  type: string
+  scope: Namespaced
+  names:
+    plural: prescalingevents
+    singular: prescalingevent
+    kind: PrescalingEvent
+    shortNames:
+      - pe
