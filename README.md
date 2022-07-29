@@ -4,8 +4,21 @@ This project is a Prometheus exporter written in Golang, its goal is to provide 
 
 The project includes an exporter that calculates the metric to provide according to the annotations defined on the hpa. and an API that allows to declare an event and a capacity multiplier
 
+## Requirements
 
-## Annotations to add on HPA
+   - Prometheus Stack or Victoria Metrics Stack
+   - [Prometheus Adapater](https://github.com/kubernetes-sigs/prometheus-adapter) 
+
+## Install
+
+- Clone repo
+- Run this command with Helm3
+
+```bash
+helm install prescaling-exporter ./kubernetes/helm/prescaling-exporter
+```
+
+## Configure a Horizontal Pod Autoscaler
 
 To be able to pre-scale an application every day before a traffic spike, the only thing to do is to add the
 following annotations on the HPA:
