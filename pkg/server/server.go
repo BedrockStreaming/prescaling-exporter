@@ -37,7 +37,7 @@ func (s *Server) Initialize() error {
 	router := mux.NewRouter()
 
 	router.PathPrefix("/swagger/").Handler(httpSwagger.Handler(
-		httpSwagger.URL("http://localhost:9101/swagger/doc.json"), //The url pointing to API definition
+		httpSwagger.URL("doc.json"), //The url pointing to API definition
 		httpSwagger.DeepLinking(true),
 		httpSwagger.DocExpansion("none"),
 		httpSwagger.DomID("swagger-ui"),
