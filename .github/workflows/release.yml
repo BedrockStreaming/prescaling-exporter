@@ -31,7 +31,19 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           commit_message: "ci: bump charts to ${{ steps.bumpr.outputs.next_version }}"
-          
+
+      - name: Install Helm
+        uses: azure/setup-helm@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run chart-releaser
+        uses: helm/chart-releaser-action@v1.4.0
+        with:
+          charts_dir: helm/
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
+
       - name: Update corresponding major and minor tag
         uses: haya14busa/action-update-semver@v1
         if: "!steps.bumpr.outputs.skip"
