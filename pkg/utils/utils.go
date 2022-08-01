@@ -13,7 +13,7 @@ func SetTime(str string, now time.Time) (time.Time, error) {
 	}
 
 	hour, min, sec := timeStamp.Clock()
-	dateTime := time.Date(now.Year(), now.Month(), now.Day(), hour, min, sec, 0, now.Location())
+	dateTime := time.Date(now.Year(), now.Month(), now.Day(), hour, min, sec, 0, time.UTC)
 
 	return dateTime, nil
 }
