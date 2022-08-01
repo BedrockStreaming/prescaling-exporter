@@ -10,7 +10,7 @@ require (
 	github.com/stretchr/testify v1.8.0
 	github.com/swaggo/http-swagger v1.2.8
 	github.com/swaggo/swag v1.8.2
-	k8s.io/api v0.24.1
+	k8s.io/api v0.24.3
 	k8s.io/apimachinery v0.24.3
 	k8s.io/client-go v0.24.1
 	k8s.io/utils v0.0.0-20220210201930-3a6ce19ff2f9
