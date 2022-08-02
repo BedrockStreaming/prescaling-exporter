@@ -73,8 +73,8 @@ jobs:
       # Update version in Chart.yaml 
       - if: steps.tag.outputs.value != ''
         run: |
-          sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' */Chart.yaml
-          sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' */Chart.yaml 
+          sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' ./helm/prescaling-exporter/Chart.yaml
+          sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' ./helm/prescaling-exporter/Chart.yaml 
       - if: steps.tag.outputs.value != ''
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
