@@ -13,6 +13,8 @@ on:
 jobs:
   release:
     if: github.event.action != 'labeled'
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
@@ -85,12 +87,6 @@ jobs:
         uses: azure/setup-helm@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Configure Git
-        if: steps.tag.outputs.value != ''
-        run: |
-          git config user.name "$GITHUB_ACTOR"
-          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
 
       - name: Run chart-releaser 
         if: steps.tag.outputs.value != ''
