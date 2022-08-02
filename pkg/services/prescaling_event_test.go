@@ -14,7 +14,7 @@ import (
 
 func TestNewEventService(t *testing.T) {
 
-	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC))
+	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.Now().Local().Location()))
 	fakePrescalingEvents := &fake.FakePrescalingEvents{}
 
 	type args struct {
@@ -48,7 +48,7 @@ func TestNewEventService(t *testing.T) {
 }
 
 //func TestPrescalingEventService_Clean(t *testing.T) {
-//	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC))
+//	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.Now().Local().Location()))
 //	fakeEventRepository := fake.FakePrescalingEvents{}
 //	fakeEventRepository.Fake.ReactionChain = []testingFake.Reactor{
 //	}

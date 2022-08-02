@@ -16,8 +16,10 @@ import (
 	testclientk8s "k8s.io/client-go/kubernetes/fake"
 )
 
+var loc = time.Now().Local().Location()
+
 func TestGetHpa(t *testing.T) {
-	fakeClock := clock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC))
+	fakeClock := clock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, loc))
 
 	var client k8s.Client
 	client.Clientset = testclientk8s.NewSimpleClientset(
@@ -75,8 +77,8 @@ func TestGetHpa(t *testing.T) {
 			Project:         "project-a",
 			Namespace:       "default",
 			Deployment:      "project-a",
-			Start:           time.Date(2022, time.March, 2, 20, 00, 0, 0, time.UTC),
-			End:             time.Date(2022, time.March, 2, 23, 00, 0, 0, time.UTC),
+			Start:           time.Date(2022, time.March, 2, 20, 00, 0, 0, loc),
+			End:             time.Date(2022, time.March, 2, 23, 00, 0, 0, loc),
 		},
 		{
 			Replica:         20,
@@ -84,8 +86,8 @@ func TestGetHpa(t *testing.T) {
 			Project:         "project-b",
 			Namespace:       "default",
 			Deployment:      "project-b",
-			Start:           time.Date(2022, time.March, 2, 18, 00, 0, 0, time.UTC),
-			End:             time.Date(2022, time.March, 2, 23, 30, 0, 0, time.UTC),
+			Start:           time.Date(2022, time.March, 2, 18, 00, 0, 0, loc),
+			End:             time.Date(2022, time.March, 2, 23, 30, 0, 0, loc),
 		},
 	}
 
@@ -94,7 +96,7 @@ func TestGetHpa(t *testing.T) {
 }
 
 func TestGetHpaError(t *testing.T) {
-	fakeClock := clock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC))
+	fakeClock := clock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, loc))
 
 	var client k8s.Client
 	client.Clientset = testclientk8s.NewSimpleClientset(
@@ -197,8 +199,8 @@ func TestCheckAnnotationsKO(t *testing.T) {
 			name: "OK",
 			prescaling: Hpa{
 				Replica: 1,
-				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
-				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
+				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
+				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
 			},
 		},
 		{
@@ -206,8 +208,8 @@ func TestCheckAnnotationsKO(t *testing.T) {
 			expected: "annotation replica min is misconfigured",
 			prescaling: Hpa{
 				Replica: 0,
-				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
-				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
+				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
+				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
 			},
 		},
 		{
@@ -216,7 +218,7 @@ func TestCheckAnnotationsKO(t *testing.T) {
 			prescaling: Hpa{
 				Replica: 1,
 				Start:   time.Time{},
-				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
+				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
 			},
 		},
 		{
@@ -224,7 +226,7 @@ func TestCheckAnnotationsKO(t *testing.T) {
 			expected: "annotation time start is misconfigured",
 			prescaling: Hpa{
 				Replica: 1,
-				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
+				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
 				End:     time.Time{},
 			},
 		},
@@ -250,8 +252,8 @@ func TestCheckAnnotationsOK(t *testing.T) {
 			name: "OK - checkAnnotation return nil",
 			prescaling: Hpa{
 				Replica: 1,
-				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
-				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
+				Start:   time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
+				End:     time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
 			},
 		},
 	}
