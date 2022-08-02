@@ -81,7 +81,7 @@ jobs:
           commit_message: "ci: bump charts to ${{steps.version_tag.outputs.tag}}"
 
       - name: Install Helm 
-        if: "steps.tag.outputs.value != ''"
+        if: steps.tag.outputs.value != ''
         uses: azure/setup-helm@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
