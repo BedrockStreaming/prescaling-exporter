@@ -87,7 +87,7 @@ jobs:
           token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Run chart-releaser 
-        if: "steps.tag.outputs.value != ''"
+        if: steps.tag.outputs.value != ''
         uses: helm/chart-releaser-action@v1.4.0
         with:
           charts_dir: helm/
