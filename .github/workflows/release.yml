@@ -71,7 +71,7 @@ jobs:
         run: ko publish . --bare --tags latest,${{steps.version_tag.outputs.tag}}
 
       # Update version in Chart.yaml 
-        if: steps.tag.outputs.value != ''
+      - if: steps.tag.outputs.value != ''
         run: |
           sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' */Chart.yaml
           sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' */Chart.yaml 
