@@ -199,7 +199,7 @@ paths:
       summary: Update a prescaling Event by name
       tags:
       - prescalingevent
-  /api/v1/events/current/:
+  /api/v1/events/current:
     get:
       consumes:
       - application/json

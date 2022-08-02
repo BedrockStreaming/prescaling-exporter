@@ -86,7 +86,7 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/events/current/": {
+        "/api/v1/events/current": {
             "get": {
                 "description": "Get current prescaling Event",
                 "consumes": [
