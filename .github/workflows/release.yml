@@ -52,7 +52,7 @@ jobs:
         with:
           go-version: '>=1.18.0'
 
-      - id: docker_tag
+      - id: version_tag
         run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
 
       - name: Login to Docker Hub
@@ -68,7 +68,31 @@ jobs:
         if: "steps.tag.outputs.value != ''"
         env:
           KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
-        run: ko publish . --bare --tags latest,${{steps.docker_tag.outputs.tag}}
+        run: ko publish . --bare --tags latest,${{steps.version_tag.outputs.tag}}
+
+      # Update version in Chart.yaml 
+        if: steps.tag.outputs.value != ''
+        run: |
+          sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' */Chart.yaml
+          sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' */Chart.yaml 
+      - if: steps.tag.outputs.value != ''
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "ci: bump charts to ${{steps.version_tag.outputs.tag}}"
+
+      - name: Install Helm 
+        if: steps.tag.outputs.value != ''
+        uses: azure/setup-helm@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Run chart-releaser 
+        if: steps.tag.outputs.value != ''
+        uses: helm/chart-releaser-action@v1.4.0
+        with:
+          charts_dir: helm/
+        env:
+          CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
   release-check:
     if: github.event.action == 'labeled'
