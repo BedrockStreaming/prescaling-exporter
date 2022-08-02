@@ -13,6 +13,8 @@ on:
 jobs:
   release:
     if: github.event.action != 'labeled'
+    permissions:
+      contents: write
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
