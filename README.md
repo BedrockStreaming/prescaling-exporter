@@ -93,7 +93,7 @@ LabelProject          | "project"                                 | label k8s wh
 
 # Event Prescaling
 
-With the CRDs and the API, it is possible to create prescaling events to allow the platform to scale on other schedules and with a multiplier.
+To enable the platform to scale on different schedules and with a multiplier, prescaling events can be request by the CRDs or the API.
 
 
 
