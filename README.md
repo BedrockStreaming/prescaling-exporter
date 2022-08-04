@@ -61,7 +61,7 @@ spec:
       targetValue: 10
 ```
 
-*it is important that the target is set to 10, the value provided for scale is 11 so that the addition of pod is progressive. currently the addition is done 10% by 10%.*
+*it's important to set the target to 10, the value provided for scale is 11, the addition of pod will be gradual. Currently, the increment is carried out 10% by 10%.*
 
 ## Configure prometheus adapter
 
