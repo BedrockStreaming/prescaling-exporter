@@ -36,6 +36,19 @@ jobs:
           if_true: ${{ github.ref }}
           if_false: ${{ steps.bumpr.outputs.next_version }}
 
+      - id: version_tag
+        run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
+
+      # Update version in Chart.yaml
+      - if: steps.tag.outputs.value != ''
+        run: |
+          sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' ./helm/prescaling-exporter/Chart.yaml
+          sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' ./helm/prescaling-exporter/Chart.yaml 
+      - if: steps.tag.outputs.value != ''
+        uses: stefanzweifel/git-auto-commit-action@v4
+        with:
+          commit_message: "ci: bump charts to ${{steps.version_tag.outputs.tag}}"
+
       - name: Create release
         uses: shogo82148/actions-create-release@v1
         if: "steps.tag.outputs.value != ''"
@@ -52,9 +65,6 @@ jobs:
         with:
           go-version: '>=1.18.0'
 
-      - id: version_tag
-        run: echo "::set-output name=tag::$(echo ${{steps.tag.outputs.value}} | cut -c 2-)"
-
       - name: Login to Docker Hub
         uses: docker/login-action@v2
         if: "steps.tag.outputs.value != ''"
@@ -70,27 +80,29 @@ jobs:
           KO_DOCKER_REPO: bedrockstreaming/prescaling-exporter
         run: ko publish . --bare --tags latest,${{steps.version_tag.outputs.tag}}
 
-      # Update version in Chart.yaml 
-      - if: steps.tag.outputs.value != ''
-        run: |
-          sed -i '/^version:/c\version: ${{steps.version_tag.outputs.tag}}' ./helm/prescaling-exporter/Chart.yaml
-          sed -i '/^appVersion:/c\appVersion: "${{steps.version_tag.outputs.tag}}"' ./helm/prescaling-exporter/Chart.yaml 
-      - if: steps.tag.outputs.value != ''
-        uses: stefanzweifel/git-auto-commit-action@v4
+  release-helm: 
+    needs: [release]
+    runs-on: ubuntu-latest
+    steps:
+      - name: "Checkout ${{ github.ref }} ( ${{ github.sha }} )"
+        uses: actions/checkout@v3
         with:
-          commit_message: "ci: bump charts to ${{steps.version_tag.outputs.tag}}"
+          fetch-depth: 0
+          ref: 'main'
 
-      - name: Install Helm 
-        if: steps.tag.outputs.value != ''
+      - name: Configure Git
+        run: |
+          git config user.name "$GITHUB_ACTOR"
+          git config user.email "$GITHUB_ACTOR@users.noreply.github.com"
+      - name: Install Helm
         uses: azure/setup-helm@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Run chart-releaser 
-        if: steps.tag.outputs.value != ''
+      - name: Run chart-releaser
         uses: helm/chart-releaser-action@v1.4.0
         with:
-          charts_dir: helm/
+          charts_dir: helm
         env:
           CR_TOKEN: "${{ secrets.GITHUB_TOKEN }}"
 
