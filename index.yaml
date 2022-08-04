@@ -2,6 +2,17 @@ apiVersion: v1
 entries:
   prescaling-exporter:
   - apiVersion: v2
+    appVersion: 0.2.9
+    created: "2022-08-04T12:24:38.310974006Z"
+    description: A Helm chart dedicated to deploy a prometheus exporter to prescale
+      applications in Kubernetes
+    digest: aa557d1fca50eb4b08b31d43b829bfe815c959207e629db1a9a695d9b6fe973f
+    name: prescaling-exporter
+    type: application
+    urls:
+    - https://github.com/BedrockStreaming/prescaling-exporter/releases/download/prescaling-exporter-0.2.9/prescaling-exporter-0.2.9.tgz
+    version: 0.2.9
+  - apiVersion: v2
     appVersion: 0.2.8
     created: "2022-08-04T12:21:01.537301014Z"
     description: A Helm chart dedicated to deploy a prometheus exporter to prescale
@@ -34,4 +45,4 @@ entries:
     urls:
     - https://github.com/BedrockStreaming/prescaling-exporter/releases/download/prescaling-exporter-0.2.6/prescaling-exporter-0.2.6.tgz
     version: 0.2.6
-generated: "2022-08-04T12:21:01.537321716Z"
+generated: "2022-08-04T12:24:38.311015105Z"
