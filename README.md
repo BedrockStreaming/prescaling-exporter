@@ -54,7 +54,7 @@ spec:
   metrics:
   - type: External
     external:
-      metricName: "min_replica"
+      metricName: "prescale_metric"
       metricSelector:
           matchLabels:
             deployment: "{{ .Release.Name }}"
@@ -70,12 +70,12 @@ A configuration example using the prometheus adapter to supply the metric to the
 ```
   - "metricsQuery": "avg(<<.Series>>{<<.LabelMatchers>>})"
     "name":
-      "as": "min_replica"
+      "as": "prescale_metric"
     "resources":
       "overrides":
         "namespace":
           "resource": "namespace"
-    "seriesQuery": "min_replica"
+    "seriesQuery": "prescale_metric"
 ```
 
 ## Configure parameters 
@@ -91,11 +91,26 @@ AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Annotation s
 AnnotationMinReplicas | "annotations.scaling.exporter.replica.min"| Annotation in min HPA for create metrique
 LabelProject          | "project"                                 | label k8s where to retrieve the value for the project label of the metric
 
-# Event Prescaling
+# Prescaling Web server
+## OpenAPI docs
 
-To enable the platform to scale on different schedules and with a multiplier, prescaling events can be request by the CRDs or the API.
+In the application is provided a swagger which is accessible with the endpoint. 
 
+/swagger/index.html
 
+## Event API 
+
+To allow the platform to scale up and down on different schedules and with a multiplier, pre-scaling events can be requested by the DRBs or the API.
+
+The API allows the creation/modification and deletion of Prescaling Event CRDs in the cluster
+
+/api/v1/events/
+
+## Metrics
+
+The metrics are exposed with the endpoint
+
+/metrics
 
 # Build
 ## Golang utils 
