@@ -1,10 +1,10 @@
 package prescaling
 
 const (
-	UPSCALE     int  = 11
-	NODOWNSCALE int  = 10
-	DOWNSCALE   int  = 9
-	NOSCALE     int  = 0
+	UPSCALE     int = 11
+	NODOWNSCALE int = 10
+	DOWNSCALE   int = 9
+	NOSCALE     int = 0
 )
 
 func DesiredScaling(eventInRangeTime bool, multiplier int, minReplica int, currentReplica int32) int {

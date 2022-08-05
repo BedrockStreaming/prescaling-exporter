@@ -1,4 +1,4 @@
-module github.com/bedrockstreaming/prescaling-exporter
+module github.com/BedrockStreaming/prescaling-exporter
 
 go 1.18
 

@@ -7,8 +7,8 @@ import (
 
 	rest "k8s.io/client-go/rest"
 
-	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	"github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 )
 
 type PrescalingV1Interface interface {

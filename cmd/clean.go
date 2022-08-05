@@ -5,10 +5,10 @@ import (
 	"github.com/spf13/cobra"
 	"k8s.io/utils/clock"
 
-	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/config"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/k8s"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
+	"github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/config"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/k8s"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/services"
 )
 
 var retention int
