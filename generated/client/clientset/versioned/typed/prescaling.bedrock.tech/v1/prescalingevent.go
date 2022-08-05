@@ -11,8 +11,8 @@ import (
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
 
-	scheme "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	scheme "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 )
 
 // PrescalingEventsGetter has a method to return a PrescalingEventInterface.

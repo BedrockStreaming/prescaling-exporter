@@ -9,9 +9,9 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/clock"
 
-	prescalingv1 "github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
+	prescalingv1 "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/utils"
 )
 
 type PrescalingEventOutput struct {

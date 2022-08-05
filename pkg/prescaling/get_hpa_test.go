@@ -6,9 +6,9 @@ import (
 
 	clock "k8s.io/utils/clock/testing"
 
-	"github.com/bedrockstreaming/prescaling-exporter/generated/client/clientset/versioned/fake"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/k8s"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
+	"github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/fake"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/k8s"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/services"
 
 	"github.com/stretchr/testify/assert"
 	"k8s.io/api/autoscaling/v2beta2"

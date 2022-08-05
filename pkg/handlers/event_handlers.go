@@ -9,9 +9,9 @@ import (
 	"k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
-	v1 "github.com/bedrockstreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/services"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/services"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/utils"
 )
 
 type CreateDTO struct {

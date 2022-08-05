@@ -12,7 +12,6 @@ var loc = time.Now().Local().Location()
 func TestSetTime(t *testing.T) {
 
 	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, loc)
-	
 
 	testCases := []struct {
 		name         string

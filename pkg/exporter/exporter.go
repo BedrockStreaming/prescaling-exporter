@@ -4,8 +4,8 @@ import (
 	"github.com/prometheus/client_golang/prometheus"
 	log "github.com/sirupsen/logrus"
 
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/prescaling"
-	"github.com/bedrockstreaming/prescaling-exporter/pkg/utils"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/prescaling"
+	"github.com/BedrockStreaming/prescaling-exporter/pkg/utils"
 )
 
 type prescalingCollector struct {
