@@ -23,7 +23,7 @@ helm install prescaling-exporter ./helm/prescaling-exporter -n prescaling-export
 
 > You can use skaffold if you want.
 
-## Configure a Horizontal Pod Autoscaler
+## Configure an Horizontal Pod Autoscaler
 
 To be able to pre-scale an application every day before a traffic spike, the only thing to do is to add the
 following annotations on the HPA:
