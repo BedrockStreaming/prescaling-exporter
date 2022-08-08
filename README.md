@@ -80,7 +80,7 @@ Here is a configuration example using the prometheus adapter to supply the metri
 
 ## Configure parameters 
 
-You can modify the application's settings to use different annotations or a different port. Configurable variable environments in the chart values are used to do this.
+You can modify the application's settings to use different annotations or a different port. Configurable variable environments in the chart values are used to do this:
 
 Parameters            | Default values                            | Comment
 ---                   | ---                                       | --- 
