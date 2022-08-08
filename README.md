@@ -100,7 +100,7 @@ In the application is provided a swagger which is accessible with the endpoint.
 
 ## Event API 
 
-To allow the platform to scale up and down on different schedules and with a multiplier, pre-scaling events can be requested by the DRBs or the API.
+To allow the platform to scale up and down on different schedules and with a multiplier, prescaling events can be registered by the DRBs or the API.
 
 The API allows the creation/modification and deletion of Prescaling Event CRDs in the cluster
 
