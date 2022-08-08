@@ -2,7 +2,7 @@
 
 This project is a Prometheus exporter written in Golang, its goal is to provide a metric that scales applications to a requested capacity on a daily time slot or on an event declared in the embedded api. 
 
-The project includes an exporter that calculates the metric to provide according to the annotations defined on the hpa. and an API that allows to declare an event and a capacity multiplier
+The exporter exposes a metric calculated according to the annotations defined on the HPA. The project also exposes an API that allows to register an event with a capacity multiplier.
 
 ## Requirements
 
