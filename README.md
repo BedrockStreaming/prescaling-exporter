@@ -89,7 +89,7 @@ Port                  | "9101"                                    | Application 
 AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Annotation end in HPA for create metrique
 AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Annotation start in HPA for create metrique
 AnnotationMinReplicas | "annotations.scaling.exporter.replica.min"| Annotation in min HPA for create metrique
-LabelProject          | "project"                                 | label k8s where to retrieve the value for the project label of the metric
+LabelProject          | "project"                                 | k8s label used to add a label in the prescaling metric
 
 # Prescaling Web server
 ## OpenAPI docs
