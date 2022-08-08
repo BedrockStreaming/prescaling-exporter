@@ -104,9 +104,7 @@ The following API allows the creation, modification and deletion of Prescaling E
 
 ## Metrics
 
-The metrics are exposed with the endpoint
-
-/metrics
+The metrics are exposed on `/metrics` endpoint.
 
 # Build
 ## Golang utils 
