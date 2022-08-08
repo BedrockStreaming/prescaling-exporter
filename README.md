@@ -61,7 +61,7 @@ spec:
       targetValue: 10
 ```
 
-*it's important to set the target to 10, the value provided for scale is 11, the addition of pod will be gradual. Currently, the increment is carried out 10% by 10%.*
+> It's important to set the `targetValue` to 10. The metric's value provided by the exporter in order to scale is 11. The scale up of pods will be gradual. Currently, the increment is carried out 10% by 10%.
 
 ## Configure prometheus adapter
 
