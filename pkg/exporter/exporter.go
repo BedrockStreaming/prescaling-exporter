@@ -9,13 +9,19 @@ import (
 )
 
 type prescalingCollector struct {
-	desiredMetrics *prometheus.Desc
+	prescaleMetrics *prometheus.Desc
+	minMetrics *prometheus.Desc
 	prescaling     prescaling.IPrescaling
 }
 
 func NewPrescalingCollector(p prescaling.IPrescaling) prometheus.Collector {
 	return &prescalingCollector{
-		desiredMetrics: prometheus.NewDesc(
+		prescaleMetrics: prometheus.NewDesc(
+			"prescale_metric",
+			"Number used for prescale application",
+			[]string{"project", "deployment", "namespace"},
+			nil,
+		),minMetrics: prometheus.NewDesc(
 			"min_replica",
 			"Number of pod desired for prescale",
 			[]string{"project", "deployment", "namespace"},
@@ -26,7 +32,8 @@ func NewPrescalingCollector(p prescaling.IPrescaling) prometheus.Collector {
 }
 
 func (collector *prescalingCollector) Describe(ch chan<- *prometheus.Desc) {
-	ch <- collector.desiredMetrics
+	ch <- collector.prescaleMetrics
+	ch <- collector.minMetrics
 }
 
 func (collector *prescalingCollector) Collect(ch chan<- prometheus.Metric) {
@@ -56,6 +63,8 @@ func (collector *prescalingCollector) Collect(ch chan<- prometheus.Metric) {
 func (collector *prescalingCollector) addDataToMetrics(ch chan<- prometheus.Metric, multiplier int, hpa prescaling.Hpa) {
 	eventInRangeTime := utils.InRangeTime(hpa.Start, hpa.End, collector.prescaling.GetEventService().GetClock().Now())
 	desiredScalingType := prescaling.DesiredScaling(eventInRangeTime, multiplier, hpa.Replica, hpa.CurrentReplicas)
-	metric := prometheus.MustNewConstMetric(collector.desiredMetrics, prometheus.GaugeValue, float64(desiredScalingType), hpa.Project, hpa.Deployment, hpa.Namespace)
-	ch <- metric
+	prescaleMetric := prometheus.MustNewConstMetric(collector.prescaleMetrics, prometheus.GaugeValue, float64(desiredScalingType), hpa.Project, hpa.Deployment, hpa.Namespace)
+	minMetric := prometheus.MustNewConstMetric(collector.minMetrics, prometheus.GaugeValue, float64(hpa.Replica), hpa.Project, hpa.Deployment, hpa.Namespace)
+	ch <- prescaleMetric
+	ch <- minMetric
 }
