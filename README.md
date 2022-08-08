@@ -65,7 +65,7 @@ spec:
 
 ## Configure prometheus adapter
 
-A configuration example using the prometheus adapter to supply the metric to the Kubernetes cluster. 
+Here is a configuration example using the prometheus adapter to supply the metric to the Kubernetes cluster:
 
 ```
   - "metricsQuery": "avg(<<.Series>>{<<.LabelMatchers>>})"
