@@ -94,9 +94,7 @@ LabelProject          | "project"                                 | k8s label us
 # Prescaling Web server
 ## OpenAPI docs
 
-In the application is provided a swagger which is accessible with the endpoint. 
-
-/swagger/index.html
+This application provides a swagger UI which is accessible on  `/swagger/index.html`.
 
 ## Event API 
 
