@@ -9,7 +9,7 @@ The exporter exposes a metric calculated according to the annotations defined on
    - Prometheus Stack or Victoria Metrics Stack
    - [Prometheus Adapater](https://github.com/kubernetes-sigs/prometheus-adapter) 
 
-*Info : It is quite possible to use this solution with another observability stack than Prometheus. For example Datadog or Newrelic, but we don't have a configuration example.* 
+> Info: It is quite possible to use this solution with another observability stack than Prometheus. For example, Datadog or Newrelic, but we do not provide a configuration example.
 
 # Install
 ## Kubernetes Deployement
