@@ -84,7 +84,7 @@ You can modify the application's settings to use different annotations or a diff
 
 Parameters            | Default values                            | Comment
 ---                   | ---                                       | --- 
-Namespace             | "prescaling-exporter"                     | Namespace for PrescalingEvent
+Namespace             | "prescaling"                     | Namespace for the prescaling stack
 Port                  | "9101"                                    | Application port
 AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Annotation end in HPA for create metrique
 AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Annotation start in HPA for create metrique
