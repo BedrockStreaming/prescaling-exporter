@@ -21,7 +21,7 @@ The exporter exposes a metric calculated according to the annotations defined on
 helm install prescaling-exporter ./helm/prescaling-exporter -n prescaling-exporter --create-namespace
 ```
 
-*You can use skaffold if you want.* 
+> You can use skaffold if you want.
 
 ## Configure a Horizontal Pod Autoscaler
 
