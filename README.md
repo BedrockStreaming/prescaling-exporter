@@ -100,9 +100,7 @@ This application provides a swagger UI which is accessible on  `/swagger/index.h
 
 To allow the platform to scale up and down on different schedules and with a multiplier, prescaling events can be registered by the DRBs or the API.
 
-The API allows the creation/modification and deletion of Prescaling Event CRDs in the cluster
-
-/api/v1/events/
+The following API allows the creation, modification and deletion of Prescaling Event CRDs in the cluster: `/api/v1/events/`.
 
 ## Metrics
 
