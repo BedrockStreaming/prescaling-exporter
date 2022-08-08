@@ -86,9 +86,9 @@ Parameters            | Default values                            | Comment
 ---                   | ---                                       | --- 
 Namespace             | "prescaling"                     | Namespace for the prescaling stack
 Port                  | "9101"                                    | Application port
-AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Annotation end in HPA for create metrique
-AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Annotation start in HPA for create metrique
-AnnotationMinReplicas | "annotations.scaling.exporter.replica.min"| Annotation in min HPA for create metrique
+AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Prescaling end time
+AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Prescaling start time
+AnnotationMinReplicas | "annotations.scaling.exporter.replica.min"| Minimum of desired replicas during the prescaling
 LabelProject          | "project"                                 | k8s label used to add a label in the prescaling metric
 
 # Prescaling Web server
