@@ -54,7 +54,7 @@ spec:
   metrics:
   - type: External
     external:
-      metricName: "prescale_metric"
+      metricName: "prescaling_metric"
       metricSelector:
           matchLabels:
             deployment: "{{ .Release.Name }}"
@@ -70,12 +70,12 @@ Here is a configuration example using the prometheus adapter to supply the metri
 ```
   - "metricsQuery": "avg(<<.Series>>{<<.LabelMatchers>>})"
     "name":
-      "as": "prescale_metric"
+      "as": "prescaling_metric"
     "resources":
       "overrides":
         "namespace":
           "resource": "namespace"
-    "seriesQuery": "prescale_metric"
+    "seriesQuery": "prescaling_metric"
 ```
 
 ## Configure parameters 
