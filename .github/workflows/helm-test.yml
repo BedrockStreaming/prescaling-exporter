@@ -23,4 +23,4 @@ jobs:
         run : helm lint ./helm/prescaling-exporter
 
       - name: Helm3 template
-        run : helm template prescaling-exporter helm/prescaling-exporter
+        run : helm template prescaling-exporter helm/prescaling-exporter -f helm/test-values.yml

@@ -1,0 +1,47 @@
+# Configure Prometheus service scrapping with
+prometheus:
+  monitor:
+    enabled: false
+    additionalLabels: {}
+    relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_name
+        targetLabel: kubernetes_pod_name
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_namespace
+        targetLabel: kubernetes_namespace
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - action: labeldrop
+        regex: (endpoint|pod_template_hash|pod_template_generation|controller_revision_hash)
+    scrapeTimeout: 10s
+
+# Configure VictoiraMetrics service scrapping with
+victoriametrics:
+  monitor: 
+    enabled: true
+    additionalLabels: {}
+    relabelings:
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_pod_name
+        targetLabel: kubernetes_pod_name
+      - action: replace
+        regex: (.*)
+        replacement: $1
+        sourceLabels:
+        - __meta_kubernetes_namespace
+        targetLabel: kubernetes_namespace
+      - action: labelmap
+        regex: __meta_kubernetes_pod_label_(.+)
+      - action: labeldrop
+        regex: (endpoint|pod_template_hash|pod_template_generation|controller_revision_hash)
+    scrapeTimeout: 10s
