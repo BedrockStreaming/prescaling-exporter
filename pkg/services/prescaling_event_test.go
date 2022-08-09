@@ -5,11 +5,14 @@ import (
 	"testing"
 	"time"
 
+	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/utils/clock"
 	testclock "k8s.io/utils/clock/testing"
 
-	prescalingv1 "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
+	fakeclient "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/fake"
+	prescalingv1client "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1"
 	"github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/typed/prescaling.bedrock.tech/v1/fake"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 )
 
 func TestNewEventService(t *testing.T) {
@@ -18,7 +21,7 @@ func TestNewEventService(t *testing.T) {
 	fakePrescalingEvents := &fake.FakePrescalingEvents{}
 
 	type args struct {
-		prescalingEventRepository prescalingv1.PrescalingEventInterface
+		prescalingEventRepository prescalingv1client.PrescalingEventInterface
 		clock                     clock.PassiveClock
 	}
 	tests := []struct {
@@ -47,297 +50,92 @@ func TestNewEventService(t *testing.T) {
 	}
 }
 
-//func TestPrescalingEventService_Clean(t *testing.T) {
-//	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.Now().Local().Location()))
-//	fakeEventRepository := fake.FakePrescalingEvents{}
-//	fakeEventRepository.Fake.ReactionChain = []testingFake.Reactor{
-//	}
-//	actionlist := testingFake.ListActionImpl{
-//
-//	}
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	type args struct {
-//		retentionDays int
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		wantErr error
-//	}{
-//		{
-//			name: "test-1",
-//			args: args{
-//				retentionDays: 1,
-//			},
-//			wantErr: errors.New("retention days must be > 1"),
-//
-//		},
-//		{
-//			name: "test-2",
-//			args: args{
-//				retentionDays: 2,
-//			},
-//			fields: fields{
-//				fakeEventRepository,
-//				fakeClock,
-//			},
-//		},
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			if err := e.Clean(tt.args.retentionDays); err.Error() != tt.wantErr.Error() {
-//				t.Errorf("Clean() error = %v, wantErr %v", err, tt.wantErr)
-//			}
-//		})
-//	}
-//}
+func TestPrescalingEventService_Current(t *testing.T) {
+	loc, _ := time.LoadLocation("Europe/Paris")
+	fakeClock := testclock.NewFakeClock(time.Date(2022, time.July, 2, 23, 0, 1, 0, loc))
 
-//func TestPrescalingEventService_Create(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	type args struct {
-//		prescalingevent *v1.PrescalingEvent
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		want    *PrescalingEventOutput
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			got, err := e.Create(tt.args.prescalingevent)
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("Create() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("Create() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_Current(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		want    *PrescalingEventOutput
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			got, err := e.Current()
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("Current() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("Current() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_Delete(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	type args struct {
-//		name string
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			if err := e.Delete(tt.args.name); (err != nil) != tt.wantErr {
-//				t.Errorf("Delete() error = %v, wantErr %v", err, tt.wantErr)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_Get(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	type args struct {
-//		name string
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		want    *PrescalingEventOutput
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			got, err := e.Get(tt.args.name)
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("Get() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("Get() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_GetClock(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	tests := []struct {
-//		name   string
-//		fields fields
-//		want   clock.PassiveClock
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			if got := e.GetClock(); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("GetClock() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_List(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		want    *PrescalingEventListOutput
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			got, err := e.List()
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("List() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("List() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func TestPrescalingEventService_Update(t *testing.T) {
-//	type fields struct {
-//		prescalingEventRepository prescalingv1.PrescalingEventInterface
-//		clock                     clock.PassiveClock
-//	}
-//	type args struct {
-//		prescalingevent *v1
-//	}
-//	tests := []struct {
-//		name    string
-//		fields  fields
-//		args    args
-//		want    *PrescalingEventOutput
-//		wantErr bool
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			e := &PrescalingEventService{
-//				prescalingEventRepository: tt.fields.prescalingEventRepository,
-//				clock:                     tt.fields.clock,
-//			}
-//			got, err := e.Update(tt.args.prescalingevent)
-//			if (err != nil) != tt.wantErr {
-//				t.Errorf("Update() error = %v, wantErr %v", err, tt.wantErr)
-//				return
-//			}
-//			if !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("Update() got = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
-//
-//func Test_filter(t *testing.T) {
-//	type args struct {
-//		data []v1.PrescalingEvent
-//		f    func(v1.PrescalingEvent) bool
-//	}
-//	tests := []struct {
-//		name string
-//		args args
-//		want []v1.PrescalingEvent
-//	}{
-//		// TODO: Add test cases.
-//	}
-//	for _, tt := range tests {
-//		t.Run(tt.name, func(t *testing.T) {
-//			if got := filter(tt.args.data, tt.args.f); !reflect.DeepEqual(got, tt.want) {
-//				t.Errorf("filter() = %v, want %v", got, tt.want)
-//			}
-//		})
-//	}
-//}
+	cs := fakeclient.NewSimpleClientset(
+		&v1.PrescalingEvent{
+			TypeMeta: metav1.TypeMeta{
+				Kind:       "PrescalingEvent",
+				APIVersion: "v1",
+			},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "project-event-1",
+				Namespace: "default",
+			},
+			Spec: v1.PrescalingEventSpec{
+				Date:        "2022-07-02",
+				StartTime:   "20:00:00",
+				EndTime:     "21:59:59",
+				Multiplier:  0,
+				Description: "",
+			},
+		},
+		&v1.PrescalingEvent{
+			TypeMeta: metav1.TypeMeta{
+				Kind:       "PrescalingEvent",
+				APIVersion: "v1",
+			},
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      "project-event-2",
+				Namespace: "default",
+			},
+			Spec: v1.PrescalingEventSpec{
+				Date:        "2022-07-02",
+				StartTime:   "22:00:00",
+				EndTime:     "23:59:59",
+				Multiplier:  0,
+				Description: "",
+			},
+		},
+	)
+	prescaling := cs.PrescalingV1().PrescalingEvents("default")
+
+	type fields struct {
+		prescalingEventRepository prescalingv1client.PrescalingEventInterface
+		clock                     clock.PassiveClock
+	}
+	tests := []struct {
+		name    string
+		fields  fields
+		want    *PrescalingEventOutput
+		wantErr bool
+	}{
+		{
+			name: "",
+			fields: fields{
+				prescalingEventRepository: prescaling,
+				clock:                     fakeClock,
+			},
+			want: &PrescalingEventOutput{
+				Name: "project-event-2",
+				PrescalingEventSpec: v1.PrescalingEventSpec{
+					Date:        "2022-07-02",
+					StartTime:   "22:00:00",
+					EndTime:     "23:59:59",
+					Multiplier:  0,
+					Description: "",
+				},
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		tt := tt
+		t.Run(tt.name, func(t *testing.T) {
+			e := &PrescalingEventService{
+				prescalingEventRepository: tt.fields.prescalingEventRepository,
+				clock:                     tt.fields.clock,
+			}
+			got, err := e.Current()
+			if (err != nil) != tt.wantErr {
+				t.Errorf("Current() error = %v, wantErr %v", err, tt.wantErr)
+				return
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("Current() got = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
