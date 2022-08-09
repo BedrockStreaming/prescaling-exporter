@@ -90,7 +90,7 @@ func (c *FakePrescalingEvents) Update(ctx context.Context, prescalingEvent *pres
 // Delete takes name of the prescalingEvent and deletes it. Returns an error if one occurs.
 func (c *FakePrescalingEvents) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteActionWithOptions(prescalingeventsResource, c.ns, name, opts), &prescalingbedrocktechv1.PrescalingEvent{})
+		Invokes(testing.NewDeleteAction(prescalingeventsResource, c.ns, name), &prescalingbedrocktechv1.PrescalingEvent{})
 
 	return err
 }

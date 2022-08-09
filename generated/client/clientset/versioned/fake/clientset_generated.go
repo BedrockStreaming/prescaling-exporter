@@ -59,10 +59,7 @@ func (c *Clientset) Tracker() testing.ObjectTracker {
 	return c.tracker
 }
 
-var (
-	_ clientset.Interface = &Clientset{}
-	_ testing.FakeClient  = &Clientset{}
-)
+var _ clientset.Interface = &Clientset{}
 
 // PrescalingV1 retrieves the PrescalingV1Client
 func (c *Clientset) PrescalingV1() prescalingv1.PrescalingV1Interface {

@@ -1,7 +1,5 @@
 package v1
 
-//go:generate controller-gen object paths=$GOFILE
-
 import metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 
 // +genclient
