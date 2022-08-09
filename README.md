@@ -84,7 +84,7 @@ You can modify the application's settings to use different annotations or a diff
 
 Parameters            | Default values                            | Comment
 ---                   | ---                                       | --- 
-Namespace             | "prescaling"                     | Namespace for the prescaling stack
+Namespace             | "prescaling-exporter"                     | Namespace for the prescaling stack
 Port                  | "9101"                                    | Application port
 AnnotationEndTime     | "annotations.scaling.exporter.time.end"   | Prescaling end time
 AnnotationStartTime   | "annotations.scaling.exporter.time.start" | Prescaling start time
