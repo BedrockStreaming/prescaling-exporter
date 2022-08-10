@@ -17,12 +17,12 @@ type prescalingCollector struct {
 func NewPrescalingCollector(p prescaling.IPrescaling) prometheus.Collector {
 	return &prescalingCollector{
 		prescaleMetrics: prometheus.NewDesc(
-			"prescale_metric",
+			"prescaling_metric",
 			"Number used for prescale application",
 			[]string{"project", "deployment", "namespace"},
 			nil,
 		), minMetrics: prometheus.NewDesc(
-			"min_replica",
+			"prescaling_min_replica",
 			"Number of pod desired for prescale",
 			[]string{"project", "deployment", "namespace"},
 			nil,
