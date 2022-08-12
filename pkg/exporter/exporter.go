@@ -64,7 +64,7 @@ func (collector *prescalingCollector) addDataToMetrics(ch chan<- prometheus.Metr
 	eventInRangeTime := utils.InRangeTime(hpa.Start, hpa.End, collector.prescaling.GetEventService().GetClock().Now())
 	desiredScalingType := prescaling.DesiredScaling(eventInRangeTime, multiplier, hpa.Replica, hpa.CurrentReplicas)
 	prescaleMetric := prometheus.MustNewConstMetric(collector.prescaleMetrics, prometheus.GaugeValue, float64(desiredScalingType), hpa.Project, hpa.Deployment, hpa.Namespace)
-	minMetric := prometheus.MustNewConstMetric(collector.minMetrics, prometheus.GaugeValue, float64(hpa.Replica), hpa.Project, hpa.Deployment, hpa.Namespace)
+	minMetric := prometheus.MustNewConstMetric(collector.minMetrics, prometheus.GaugeValue, float64(hpa.Replica * multiplier), hpa.Project, hpa.Deployment, hpa.Namespace)
 	ch <- prescaleMetric
 	ch <- minMetric
 }
