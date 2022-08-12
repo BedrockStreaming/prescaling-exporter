@@ -57,6 +57,8 @@ paths:
       responses:
         '200':
           description: 'Event has been deleted'
+        '204':
+          description: 'No content'
         '404':
           description: 'No event found'
           content:
