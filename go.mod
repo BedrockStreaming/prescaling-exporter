@@ -8,7 +8,7 @@ require (
 	github.com/sirupsen/logrus v1.9.0
 	github.com/spf13/cobra v1.5.0
 	github.com/stretchr/testify v1.8.0
-	github.com/swaggo/http-swagger v1.3.1
+	github.com/swaggo/http-swagger v1.3.3
 	github.com/swaggo/swag v1.8.4
 	k8s.io/api v0.24.3
 	k8s.io/apimachinery v0.24.3
