@@ -1,0 +1,7 @@
+[Valentin Chabrier](https://github.com/Eriwyr)
+[Mickaël Villers](https://github.com/villers)
+[Jérôme Foray](https://github.com/Meroje)
+[Timothée Aufort](https://github.com/taufort)
+[Jérémy Planckeel](https://github.com/jplanckeel)
+[Kilian Perrier](https://github.com/NightPlow)
+[Gabriel Forien](https://github.com/gforien)
