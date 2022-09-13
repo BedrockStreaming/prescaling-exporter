@@ -72,7 +72,7 @@ jobs:
           username: ${{secrets.DOCKER_USERNAME}}
           password: ${{ secrets.DOCKER_AUTH_TOKEN }}
 
-      - uses: imjasonh/setup-ko@v0.5
+      - uses: imjasonh/setup-ko@v0.6
 
       - name: Build and Push on Docker Hub  
         if: "steps.tag.outputs.value != ''"
