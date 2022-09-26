@@ -11,7 +11,7 @@ require (
 	github.com/swaggo/http-swagger v1.3.3
 	github.com/swaggo/swag v1.8.5
 	k8s.io/api v0.25.0
-	k8s.io/apimachinery v0.25.0
+	k8s.io/apimachinery v0.25.2
 	k8s.io/client-go v0.25.0
 	k8s.io/code-generator v0.25.0
 	k8s.io/utils v0.0.0-20220728103510-ee6ede2d64ed
