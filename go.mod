@@ -13,7 +13,7 @@ require (
 	k8s.io/api v0.25.4
 	k8s.io/apimachinery v0.26.2
 	k8s.io/client-go v0.25.4
-	k8s.io/code-generator v0.26.2
+	k8s.io/code-generator v0.26.3
 	k8s.io/utils v0.0.0-20221107191617-1a15be271d1d
 )
 
