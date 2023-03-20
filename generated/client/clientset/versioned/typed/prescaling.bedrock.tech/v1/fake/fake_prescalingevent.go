@@ -5,14 +5,13 @@ package fake
 import (
 	"context"
 
+	prescalingbedrocktechv1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 	v1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	labels "k8s.io/apimachinery/pkg/labels"
 	schema "k8s.io/apimachinery/pkg/runtime/schema"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	testing "k8s.io/client-go/testing"
-
-	prescalingbedrocktechv1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 )
 
 // FakePrescalingEvents implements PrescalingEventInterface
@@ -90,7 +89,7 @@ func (c *FakePrescalingEvents) Update(ctx context.Context, prescalingEvent *pres
 // Delete takes name of the prescalingEvent and deletes it. Returns an error if one occurs.
 func (c *FakePrescalingEvents) Delete(ctx context.Context, name string, opts v1.DeleteOptions) error {
 	_, err := c.Fake.
-		Invokes(testing.NewDeleteAction(prescalingeventsResource, c.ns, name), &prescalingbedrocktechv1.PrescalingEvent{})
+		Invokes(testing.NewDeleteActionWithOptions(prescalingeventsResource, c.ns, name, opts), &prescalingbedrocktechv1.PrescalingEvent{})
 
 	return err
 }
