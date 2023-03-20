@@ -6,13 +6,12 @@ import (
 	"context"
 	"time"
 
+	scheme "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
+	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	types "k8s.io/apimachinery/pkg/types"
 	watch "k8s.io/apimachinery/pkg/watch"
 	rest "k8s.io/client-go/rest"
-
-	scheme "github.com/BedrockStreaming/prescaling-exporter/generated/client/clientset/versioned/scheme"
-	v1 "github.com/BedrockStreaming/prescaling-exporter/pkg/apis/prescaling.bedrock.tech/v1"
 )
 
 // PrescalingEventsGetter has a method to return a PrescalingEventInterface.
