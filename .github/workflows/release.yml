@@ -60,7 +60,7 @@ jobs:
           draft: false
           prerelease: false
 
-      - uses: actions/setup-go@v3
+      - uses: actions/setup-go@v4
         if: "steps.tag.outputs.value != ''"
         with:
           go-version: '>=1.18.0'
