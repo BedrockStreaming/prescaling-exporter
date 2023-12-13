@@ -36,7 +36,7 @@ annotations.scaling.exporter.replica.min  | "integer"
 
 
 ```
-apiVersion: autoscaling/v2beta1
+apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
   name: "{{ .Release.Name }}"
@@ -54,14 +54,17 @@ spec:
   metrics:
   - type: External
     external:
-      metricName: "prescaling_metric"
-      metricSelector:
+      metric:
+        name: "prescaling_metric"
+        selector:
           matchLabels:
             deployment: "{{ .Release.Name }}"
-      targetValue: 10
+      target
+        type: Value
+        value: 10
 ```
 
-> It's important to set the `targetValue` to 10. The metric's value provided by the exporter in order to scale is 11. The scale up of pods will be gradual. Currently, the increment is carried out 10% by 10%.
+> It's important to set the `target.value` to 10. The metric's value provided by the exporter in order to scale is 11. The scale up of pods will be gradual. Currently, the increment is carried out 10% by 10%.
 
 ## Configure prometheus adapter
 
