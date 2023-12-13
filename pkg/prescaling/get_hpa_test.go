@@ -11,7 +11,7 @@ import (
 	"github.com/BedrockStreaming/prescaling-exporter/pkg/services"
 
 	"github.com/stretchr/testify/assert"
-	"k8s.io/api/autoscaling/v2beta2"
+	"k8s.io/api/autoscaling/v2"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	testclientk8s "k8s.io/client-go/kubernetes/fake"
 )
@@ -23,7 +23,7 @@ func TestGetHpa(t *testing.T) {
 
 	var client k8s.Client
 	client.Clientset = testclientk8s.NewSimpleClientset(
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-a",
 				Namespace: "default",
@@ -34,16 +34,16 @@ func TestGetHpa(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-a"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-a",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-b",
 				Namespace: "default",
@@ -54,12 +54,12 @@ func TestGetHpa(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-b"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-b",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},
@@ -100,7 +100,7 @@ func TestGetHpaError(t *testing.T) {
 
 	var client k8s.Client
 	client.Clientset = testclientk8s.NewSimpleClientset(
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-replica-nil",
 				Namespace: "default",
@@ -111,16 +111,16 @@ func TestGetHpaError(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-replica-nil"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-replica-nil",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-no-start",
 				Namespace: "default",
@@ -130,16 +130,16 @@ func TestGetHpaError(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-no-start"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-no-start",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-no-end",
 				Namespace: "default",
@@ -149,16 +149,16 @@ func TestGetHpaError(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-no-end"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-no-end",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},
-		&v2beta2.HorizontalPodAutoscaler{
+		&v2.HorizontalPodAutoscaler{
 			ObjectMeta: metav1.ObjectMeta{
 				Name:      "project-replica-misconfigured",
 				Namespace: "default",
@@ -169,12 +169,12 @@ func TestGetHpaError(t *testing.T) {
 				},
 				Labels: map[string]string{"project": "project-replica-misconfigured"},
 			},
-			Spec: v2beta2.HorizontalPodAutoscalerSpec{
-				ScaleTargetRef: v2beta2.CrossVersionObjectReference{
+			Spec: v2.HorizontalPodAutoscalerSpec{
+				ScaleTargetRef: v2.CrossVersionObjectReference{
 					Name: "project-replica-misconfigured",
 				},
 			},
-			Status: v2beta2.HorizontalPodAutoscalerStatus{
+			Status: v2.HorizontalPodAutoscalerStatus{
 				CurrentReplicas: 2,
 			},
 		},

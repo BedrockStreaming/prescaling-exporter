@@ -18,13 +18,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
     - name: Set up Go 1.x
       uses: actions/setup-go@v4
       with:
-        go-version: '>=1.18.0'
-
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
+        go-version: stable
 
     - name: golangci-lint
       uses: golangci/golangci-lint-action@v3
@@ -36,16 +36,16 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
+    - name: Check out code into the Go module directory
+      uses: actions/checkout@v4
+
     - name: Set up Go 1.x
       uses: actions/setup-go@v4
       with:
-        go-version: '>=1.18.0'
-
-    - name: Check out code into the Go module directory
-      uses: actions/checkout@v3
+        go-version: stable
 
     - name: Install
-      run: go install
+      run: go mod download -x
 
     - name: Test
       run: go test -v ./...
