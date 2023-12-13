@@ -13,7 +13,7 @@ import (
 )
 
 func (p Prescaling) GetHpa() []Hpa {
-	hpaList, err := p.client.Clientset.AutoscalingV2beta2().
+	hpaList, err := p.client.Clientset.AutoscalingV2().
 		HorizontalPodAutoscalers("").
 		List(context.Background(), metav1.ListOptions{})
 
