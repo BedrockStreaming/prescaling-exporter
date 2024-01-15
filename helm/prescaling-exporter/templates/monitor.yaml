@@ -1,4 +1,4 @@
-{{- if .Values.prometheus.monitor.enabled -}}
+{{- if .Values.prometheus.monitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
@@ -22,9 +22,11 @@ spec:
       relabelings:
       {{ toYaml .Values.prometheus.monitor.relabelings | nindent 8 }}
       {{- end }}
-{{- end -}}
+{{- end }}
 
-{{- if .Values.victoriametrics.monitor.enabled -}}
+--- 
+
+{{- if .Values.victoriametrics.monitor.enabled }}
 apiVersion: operator.victoriametrics.com/v1beta1
 kind: VMServiceScrape
 metadata:
@@ -47,4 +49,4 @@ spec:
   selector:
     matchLabels:
       {{- include "prescaling-exporter.selectorLabels" . | nindent 8 }}
-{{- end -}}
+{{- end }}
