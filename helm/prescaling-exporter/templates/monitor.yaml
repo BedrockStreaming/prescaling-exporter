@@ -13,6 +13,9 @@ spec:
     matchLabels:
       app: {{ template "prescaling-exporter.name" . }}
       release: {{ .Release.Name }}
+      {{- if .Values.prometheus.monitor.additionalSelectorLabels }}
+      {{- toYaml .Values.prometheus.monitor.additionalSelectorLabels | nindent 6 }}
+      {{- end }}
   endpoints:
     - port: metrics
       {{- if .Values.prometheus.monitor.scrapeTimeout }}
@@ -49,4 +52,7 @@ spec:
   selector:
     matchLabels:
       {{- include "prescaling-exporter.selectorLabels" . | nindent 8 }}
+      {{- if .Values.victoriametrics.monitor.additionalSelectorLabels }}
+      {{- toYaml .Values.victoriametrics.monitor.additionalSelectorLabels | nindent 8 }}
+      {{- end }}
 {{- end }}
