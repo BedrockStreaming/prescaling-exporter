@@ -3,7 +3,6 @@ prometheus:
   monitor:
     enabled: false
     additionalLabels: {}
-    additionalSelectorLabels: {}
     relabelings:
       - action: replace
         regex: (.*)
@@ -28,7 +27,6 @@ victoriametrics:
   monitor: 
     enabled: true
     additionalLabels: {}
-    additionalSelectorLabels: {}
     relabelings:
       - action: replace
         regex: (.*)
