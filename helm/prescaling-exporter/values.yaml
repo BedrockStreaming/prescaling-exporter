@@ -51,6 +51,7 @@ securityContext: {}
 service:
   type: ClusterIP
   port: 9101
+  additionalLabels: {}
 
 ingress:
   enabled: false

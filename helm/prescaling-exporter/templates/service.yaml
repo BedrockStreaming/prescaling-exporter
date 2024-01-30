@@ -4,6 +4,9 @@ metadata:
   name: {{ include "prescaling-exporter.fullname" . }}
   labels:
     {{- include "prescaling-exporter.labels" . | nindent 4 }}
+    {{- if .Values.service.additionalLabels }}
+    {{- toYaml .Values.service.additionalLabels | nindent 4 }}
+    {{- end }}
 spec:
   type: {{ .Values.service.type }}
   ports:
