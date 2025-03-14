@@ -13,7 +13,7 @@ import (
 )
 
 func init() {
-	// Initialiser la configuration pour les tests
+	// Initialize configuration for tests
 	config.Config.AnnotationMinReplicas = "annotations.scaling.exporter.replica.min"
 }
 
@@ -48,19 +48,19 @@ func TestNewHPAService(t *testing.T) {
 }
 
 func TestHPAService_CheckHPAMinimums(t *testing.T) {
-	// Créer un clientset factice avec des données de test
+	// Create a fake clientset with test data
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Définir les valeurs de test
+	// Define test values
 	minReplicas := int32(2)
 
-	// Créer un HPA de test avec l'annotation de minimum de réplicas
+	// Create a test HPA with the minimum replicas annotation
 	hpa := &autoscalingv2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-hpa",
 			Namespace: "default",
 			Annotations: map[string]string{
-				config.Config.AnnotationMinReplicas: "2", // Définir le minimum via l'annotation
+				config.Config.AnnotationMinReplicas: "2", // Set the minimum via annotation
 			},
 		},
 		Spec: autoscalingv2.HorizontalPodAutoscalerSpec{
@@ -76,79 +76,79 @@ func TestHPAService_CheckHPAMinimums(t *testing.T) {
 		},
 	}
 
-	// Ajouter les objets au clientset
+	// Add objects to the clientset
 	_, err := fakeClientset.AutoscalingV2().HorizontalPodAutoscalers("default").Create(context.Background(), hpa, metav1.CreateOptions{})
 	if err != nil {
-		t.Fatalf("Erreur lors de la création du HPA de test: %v", err)
+		t.Fatalf("Error creating test HPA: %v", err)
 	}
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.CheckHPAMinimums()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à CheckHPAMinimums: %v", err)
+		t.Fatalf("Error calling CheckHPAMinimums: %v", err)
 	}
 
-	// Vérifier que tous les HPA respectent leurs minimums
+	// Check that all HPAs meet their minimums
 	if !status.AllHPAsMeetMinimum {
-		t.Errorf("AllHPAsMeetMinimum devrait être true car le HPA a 3 réplicas et le minimum est 2")
+		t.Errorf("AllHPAsMeetMinimum should be true because the HPA has 3 replicas and the minimum is 2")
 	}
 
-	// Vérifier que les informations du HPA sont correctes
+	// Check that the HPA information is correct
 	if len(status.HPAInfos) != 1 {
-		t.Errorf("HPAInfos devrait contenir 1 élément, mais en contient %d", len(status.HPAInfos))
+		t.Errorf("HPAInfos should contain 1 element, but contains %d", len(status.HPAInfos))
 	} else {
 		hpaInfo := status.HPAInfos[0]
 		if hpaInfo.Namespace != "default" || hpaInfo.Name != "test-hpa" || hpaInfo.TargetKind != "Deployment" ||
 			hpaInfo.TargetName != "test-deployment" || hpaInfo.HpaMinReplicas != 3 || hpaInfo.MinReplicasAnnotation != 2 || !hpaInfo.MeetsMinimum {
-			t.Errorf("HPAInfo incorrect: %+v", hpaInfo)
+			t.Errorf("Incorrect HPAInfo: %+v", hpaInfo)
 		}
 	}
 }
 
-// TestHPAService_CheckHPAMinimums_NoHPAs teste le cas où il n'y a pas de HPA dans le cluster
+// TestHPAService_CheckHPAMinimums_NoHPAs tests the case where there are no HPAs in the cluster
 func TestHPAService_CheckHPAMinimums_NoHPAs(t *testing.T) {
-	// Créer un clientset factice sans HPA
+	// Create a fake clientset without HPAs
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.CheckHPAMinimums()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à CheckHPAMinimums: %v", err)
+		t.Fatalf("Error calling CheckHPAMinimums: %v", err)
 	}
 
-	// Vérifier que AllHPAsMeetMinimum est true quand il n'y a pas de HPA
+	// Check that AllHPAsMeetMinimum is true when there are no HPAs
 	if !status.AllHPAsMeetMinimum {
-		t.Errorf("AllHPAsMeetMinimum devrait être true quand il n'y a pas de HPA")
+		t.Errorf("AllHPAsMeetMinimum should be true when there are no HPAs")
 	}
 
-	// Vérifier que HPAInfos est vide
+	// Check that HPAInfos is empty
 	if len(status.HPAInfos) != 0 {
-		t.Errorf("HPAInfos devrait être vide, mais contient %d éléments", len(status.HPAInfos))
+		t.Errorf("HPAInfos should be empty, but contains %d elements", len(status.HPAInfos))
 	}
 }
 
-// TestHPAService_CheckHPAMinimums_HPABelowMinimum teste le cas où un HPA est en dessous du minimum requis
+// TestHPAService_CheckHPAMinimums_HPABelowMinimum tests the case where an HPA is below the required minimum
 func TestHPAService_CheckHPAMinimums_HPABelowMinimum(t *testing.T) {
-	// Créer un clientset factice avec des données de test
+	// Create a fake clientset with test data
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer un HPA de test avec l'annotation de minimum de réplicas
+	// Create a test HPA with the minimum replicas annotation
 	hpa := &autoscalingv2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-hpa",
 			Namespace: "default",
 			Annotations: map[string]string{
-				config.Config.AnnotationMinReplicas: "3", // Définir le minimum via l'annotation (3 réplicas)
+				config.Config.AnnotationMinReplicas: "3", // Set the minimum via annotation (3 replicas)
 			},
 		},
 		Spec: autoscalingv2.HorizontalPodAutoscalerSpec{
@@ -158,56 +158,56 @@ func TestHPAService_CheckHPAMinimums_HPABelowMinimum(t *testing.T) {
 			},
 		},
 		Status: autoscalingv2.HorizontalPodAutoscalerStatus{
-			CurrentReplicas: 2, // Seulement 2 réplicas, en dessous du minimum de 3
+			CurrentReplicas: 2, // Only 2 replicas, below the minimum of 3
 			DesiredReplicas: 2,
 		},
 	}
 
-	// Ajouter les objets au clientset
+	// Add the HPA to the clientset
 	_, err := fakeClientset.AutoscalingV2().HorizontalPodAutoscalers("default").Create(context.Background(), hpa, metav1.CreateOptions{})
 	if err != nil {
-		t.Fatalf("Erreur lors de la création du HPA de test: %v", err)
+		t.Fatalf("Error creating test HPA: %v", err)
 	}
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.CheckHPAMinimums()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à CheckHPAMinimums: %v", err)
+		t.Fatalf("Error calling CheckHPAMinimums: %v", err)
 	}
 
-	// Vérifier que AllHPAsMeetMinimum est false quand un HPA est en dessous du minimum
+	// Check that AllHPAsMeetMinimum is false when an HPA is below the minimum
 	if status.AllHPAsMeetMinimum {
-		t.Errorf("AllHPAsMeetMinimum devrait être false quand un HPA est en dessous du minimum")
+		t.Errorf("AllHPAsMeetMinimum should be false when an HPA is below the minimum")
 	}
 
-	// Vérifier que les informations du HPA sont correctes
+	// Check that the HPA information is correct
 	if len(status.HPAInfos) != 1 {
-		t.Errorf("HPAInfos devrait contenir 1 élément, mais en contient %d", len(status.HPAInfos))
+		t.Errorf("HPAInfos should contain 1 element, but contains %d", len(status.HPAInfos))
 	} else {
 		hpaInfo := status.HPAInfos[0]
 		if hpaInfo.Namespace != "default" || hpaInfo.Name != "test-hpa" || hpaInfo.TargetKind != "Deployment" ||
 			hpaInfo.TargetName != "test-deployment" || hpaInfo.HpaMinReplicas != 2 || hpaInfo.MinReplicasAnnotation != 3 || hpaInfo.MeetsMinimum {
-			t.Errorf("HPAInfo incorrect: %+v", hpaInfo)
+			t.Errorf("Incorrect HPAInfo: %+v", hpaInfo)
 		}
 	}
 }
 
-// TestHPAService_CheckHPAMinimums_NoAnnotation teste le cas où un HPA n'a pas d'annotation de minimum
+// TestHPAService_CheckHPAMinimums_NoAnnotation tests the case where an HPA has no minimum annotation
 func TestHPAService_CheckHPAMinimums_NoAnnotation(t *testing.T) {
-	// Créer un clientset factice avec des données de test
+	// Create a fake clientset with test data
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer un HPA de test sans annotation de minimum
+	// Create a test HPA without minimum annotation
 	hpa := &autoscalingv2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-hpa",
 			Namespace: "default",
-			// Pas d'annotation de minimum
+			// No minimum annotation
 		},
 		Spec: autoscalingv2.HorizontalPodAutoscalerSpec{
 			ScaleTargetRef: autoscalingv2.CrossVersionObjectReference{
@@ -221,46 +221,46 @@ func TestHPAService_CheckHPAMinimums_NoAnnotation(t *testing.T) {
 		},
 	}
 
-	// Ajouter l'HPA au clientset
+	// Add the HPA to the clientset
 	_, err := fakeClientset.AutoscalingV2().HorizontalPodAutoscalers("default").Create(context.Background(), hpa, metav1.CreateOptions{})
 	if err != nil {
-		t.Fatalf("Erreur lors de la création du HPA de test: %v", err)
+		t.Fatalf("Error creating test HPA: %v", err)
 	}
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.CheckHPAMinimums()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à CheckHPAMinimums: %v", err)
+		t.Fatalf("Error calling CheckHPAMinimums: %v", err)
 	}
 
-	// Vérifier que AllHPAsMeetMinimum est true car les HPA sans annotation sont ignorés
+	// Check that AllHPAsMeetMinimum is true because HPAs without annotation are ignored
 	if !status.AllHPAsMeetMinimum {
-		t.Errorf("AllHPAsMeetMinimum devrait être true quand les HPA n'ont pas d'annotation de minimum")
+		t.Errorf("AllHPAsMeetMinimum should be true when HPAs have no minimum annotation")
 	}
 
-	// Vérifier que HPAInfos est vide
+	// Check that HPAInfos is empty
 	if len(status.HPAInfos) != 0 {
-		t.Errorf("HPAInfos devrait être vide, mais contient %d éléments", len(status.HPAInfos))
+		t.Errorf("HPAInfos should be empty, but contains %d elements", len(status.HPAInfos))
 	}
 }
 
-// TestHPAService_GetPlatformScalingStatus teste la méthode GetPlatformScalingStatus
+// TestHPAService_GetPlatformScalingStatus tests the GetPlatformScalingStatus method
 func TestHPAService_GetPlatformScalingStatus(t *testing.T) {
-	// Créer un clientset factice avec des données de test
+	// Create a fake clientset with test data
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer un HPA de test avec l'annotation de minimum de réplicas
+	// Create a test HPA with the minimum replicas annotation
 	hpa := &autoscalingv2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-hpa",
 			Namespace: "default",
 			Annotations: map[string]string{
-				config.Config.AnnotationMinReplicas: "2", // Définir le minimum via l'annotation
+				config.Config.AnnotationMinReplicas: "2", // Set the minimum via annotation
 			},
 		},
 		Spec: autoscalingv2.HorizontalPodAutoscalerSpec{
@@ -270,46 +270,46 @@ func TestHPAService_GetPlatformScalingStatus(t *testing.T) {
 			},
 		},
 		Status: autoscalingv2.HorizontalPodAutoscalerStatus{
-			CurrentReplicas: 3, // Au-dessus du minimum de 2
+			CurrentReplicas: 3, // Above the minimum of 2
 			DesiredReplicas: 3,
 		},
 	}
 
-	// Ajouter l'HPA au clientset
+	// Add the HPA to the clientset
 	_, err := fakeClientset.AutoscalingV2().HorizontalPodAutoscalers("default").Create(context.Background(), hpa, metav1.CreateOptions{})
 	if err != nil {
-		t.Fatalf("Erreur lors de la création du HPA de test: %v", err)
+		t.Fatalf("Error creating test HPA: %v", err)
 	}
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.GetPlatformScalingStatus()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à GetPlatformScalingStatus: %v", err)
+		t.Fatalf("Error calling GetPlatformScalingStatus: %v", err)
 	}
 
-	// Vérifier que IsPlatformScaled est true quand tous les HPA respectent leurs minimums
+	// Check that IsPlatformScaled is true when all HPAs meet their minimums
 	if !status.IsPlatformScaled {
-		t.Errorf("IsPlatformScaled devrait être true quand tous les HPA respectent leurs minimums")
+		t.Errorf("IsPlatformScaled should be true when all HPAs meet their minimums")
 	}
 }
 
-// TestHPAService_GetPlatformScalingStatus_HPABelowMinimum teste le cas où un HPA est en dessous du minimum requis
+// TestHPAService_GetPlatformScalingStatus_HPABelowMinimum tests the case where an HPA is below the required minimum
 func TestHPAService_GetPlatformScalingStatus_HPABelowMinimum(t *testing.T) {
-	// Créer un clientset factice avec des données de test
+	// Create a fake clientset with test data
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer un HPA de test avec l'annotation de minimum de réplicas
+	// Create a test HPA with the minimum replicas annotation
 	hpa := &autoscalingv2.HorizontalPodAutoscaler{
 		ObjectMeta: metav1.ObjectMeta{
 			Name:      "test-hpa",
 			Namespace: "default",
 			Annotations: map[string]string{
-				config.Config.AnnotationMinReplicas: "3", // Définir le minimum via l'annotation (3 réplicas)
+				config.Config.AnnotationMinReplicas: "3", // Set the minimum via annotation (3 replicas)
 			},
 		},
 		Spec: autoscalingv2.HorizontalPodAutoscalerSpec{
@@ -319,52 +319,52 @@ func TestHPAService_GetPlatformScalingStatus_HPABelowMinimum(t *testing.T) {
 			},
 		},
 		Status: autoscalingv2.HorizontalPodAutoscalerStatus{
-			CurrentReplicas: 2, // Seulement 2 réplicas, en dessous du minimum de 3
+			CurrentReplicas: 2, // Only 2 replicas, below the minimum of 3
 			DesiredReplicas: 2,
 		},
 	}
 
-	// Ajouter l'HPA au clientset
+	// Add the HPA to the clientset
 	_, err := fakeClientset.AutoscalingV2().HorizontalPodAutoscalers("default").Create(context.Background(), hpa, metav1.CreateOptions{})
 	if err != nil {
-		t.Fatalf("Erreur lors de la création du HPA de test: %v", err)
+		t.Fatalf("Error creating test HPA: %v", err)
 	}
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.GetPlatformScalingStatus()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à GetPlatformScalingStatus: %v", err)
+		t.Fatalf("Error calling GetPlatformScalingStatus: %v", err)
 	}
 
-	// Vérifier que IsPlatformScaled est false quand un HPA est en dessous du minimum
+	// Check that IsPlatformScaled is false when an HPA is below the minimum
 	if status.IsPlatformScaled {
-		t.Errorf("IsPlatformScaled devrait être false quand un HPA est en dessous du minimum")
+		t.Errorf("IsPlatformScaled should be false when an HPA is below the minimum")
 	}
 }
 
-// TestHPAService_GetPlatformScalingStatus_NoHPAs teste le cas où il n'y a pas de HPA dans le cluster
+// TestHPAService_GetPlatformScalingStatus_NoHPAs tests the case where there are no HPAs in the cluster
 func TestHPAService_GetPlatformScalingStatus_NoHPAs(t *testing.T) {
-	// Créer un clientset factice sans HPA
+	// Create a fake clientset without HPAs
 	fakeClientset := fake.NewSimpleClientset()
 
-	// Créer le service HPA
+	// Create the HPA service
 	hpaService := &HPAService{
 		clientset: fakeClientset,
 	}
 
-	// Exécuter le test
+	// Run the test
 	status, err := hpaService.GetPlatformScalingStatus()
 	if err != nil {
-		t.Fatalf("Erreur lors de l'appel à GetPlatformScalingStatus: %v", err)
+		t.Fatalf("Error calling GetPlatformScalingStatus: %v", err)
 	}
 
-	// Vérifier que IsPlatformScaled est true quand il n'y a pas de HPA
+	// Check that IsPlatformScaled is true when there are no HPAs
 	if !status.IsPlatformScaled {
-		t.Errorf("IsPlatformScaled devrait être true quand il n'y a pas de HPA")
+		t.Errorf("IsPlatformScaled should be true when there are no HPAs")
 	}
 }

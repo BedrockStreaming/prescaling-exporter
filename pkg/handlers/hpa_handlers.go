@@ -9,18 +9,18 @@ import (
 	"github.com/BedrockStreaming/prescaling-exporter/pkg/utils"
 )
 
-// IHPAHandlers définit l'interface pour les handlers HPA
+// IHPAHandlers defines the interface for HPA handlers
 type IHPAHandlers interface {
 	CheckHPAMinimums(w http.ResponseWriter, r *http.Request)
 	GetPlatformScalingStatus(w http.ResponseWriter, r *http.Request)
 }
 
-// HPAHandlers implémente IHPAHandlers
+// HPAHandlers implements IHPAHandlers
 type HPAHandlers struct {
 	hpaService services.IHPAService
 }
 
-// NewHPAHandlers crée une nouvelle instance de HPAHandlers
+// NewHPAHandlers creates a new instance of HPAHandlers
 func NewHPAHandlers(hpaService services.IHPAService) IHPAHandlers {
 	return &HPAHandlers{
 		hpaService: hpaService,
@@ -28,13 +28,13 @@ func NewHPAHandlers(hpaService services.IHPAService) IHPAHandlers {
 }
 
 // CheckHPAMinimums
-// @Summary      Vérifier si les HPA respectent leurs minimums requis
-// @Description  Vérifie si tous les HPA du cluster ont au moins le nombre minimum de pods en cours d'exécution
+// @Summary      Check if HPAs meet their required minimums
+// @Description  Checks if all HPAs in the cluster have at least the minimum number of running pods
 // @Tags         cluster
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  services.HPAMinimumStatus
-// @Router       /api/v1/hpa-check [get]
+// @Router       /api/v1/hpas [get]
 func (h *HPAHandlers) CheckHPAMinimums(w http.ResponseWriter, r *http.Request) {
 	status, err := h.hpaService.CheckHPAMinimums()
 	if err != nil {
@@ -43,7 +43,7 @@ func (h *HPAHandlers) CheckHPAMinimums(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// Si tous les HPA ne respectent pas leurs minimums, renvoyer un code 200 OK
+	// If all HPAs don't meet their minimums, return a 200 OK status
 	if !status.AllHPAsMeetMinimum {
 		utils.WriteResponse(w, http.StatusOK, status)
 		return
@@ -53,13 +53,13 @@ func (h *HPAHandlers) CheckHPAMinimums(w http.ResponseWriter, r *http.Request) {
 }
 
 // GetPlatformScalingStatus
-// @Summary      Vérifier l'état de scaling de la plateforme
-// @Description  Vérifie si la plateforme est correctement scalée et renvoie les détails des HPA
+// @Summary      Check the platform scaling status
+// @Description  Checks if the platform is correctly scaled and returns HPA details
 // @Tags         cluster
 // @Accept       json
 // @Produce      json
 // @Success      200  {object}  services.PlatformScalingStatus
-// @Router       /api/v1/platform-scaling [get]
+// @Router       /api/v1/hpas/check [get]
 func (h *HPAHandlers) GetPlatformScalingStatus(w http.ResponseWriter, r *http.Request) {
 	status, err := h.hpaService.GetPlatformScalingStatus()
 	if err != nil {
@@ -68,7 +68,7 @@ func (h *HPAHandlers) GetPlatformScalingStatus(w http.ResponseWriter, r *http.Re
 		return
 	}
 
-	// Si la plateforme n'est pas correctement scalée, renvoyer un code 200 OK
+	// If the platform is not correctly scaled, return a 200 OK status
 	if !status.IsPlatformScaled {
 		utils.WriteResponse(w, http.StatusOK, status)
 		return

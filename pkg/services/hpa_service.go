@@ -12,47 +12,47 @@ import (
 	log "github.com/sirupsen/logrus"
 )
 
-// HPAInfo représente les informations d'un HPA avec ses minimums
+// HPAInfo represents information about an HPA with its minimums
 type HPAInfo struct {
-	Namespace       string `json:"namespace"`
-	Name            string `json:"name"`
-	TargetKind      string `json:"targetKind"`
-	TargetName      string `json:"targetName"`
-	HpaMinReplicas  int    `json:"hpaMinReplicas"`
+	Namespace             string `json:"namespace"`
+	Name                  string `json:"name"`
+	TargetKind            string `json:"targetKind"`
+	TargetName            string `json:"targetName"`
+	HpaMinReplicas        int    `json:"hpaMinReplicas"`
 	MinReplicasAnnotation int    `json:"minReplicasAnnotation"`
-	MeetsMinimum    bool   `json:"meetsMinimum"`
+	MeetsMinimum          bool   `json:"meetsMinimum"`
 }
 
-// HPAMinimumStatus représente l'état des minimums des HPA dans le cluster
+// HPAMinimumStatus represents the status of HPA minimums in the cluster
 type HPAMinimumStatus struct {
 	AllHPAsMeetMinimum bool      `json:"allHPAsMeetMinimum"`
 	HPAInfos           []HPAInfo `json:"hpaInfos,omitempty"`
 }
 
-// PlatformScalingStatus représente l'état de scaling de la plateforme
+// PlatformScalingStatus represents the scaling status of the platform
 type PlatformScalingStatus struct {
 	IsPlatformScaled bool `json:"isPlatformScaled"`
 }
 
-// IHPAService définit l'interface pour le service HPA
+// IHPAService defines the interface for the HPA service
 type IHPAService interface {
 	CheckHPAMinimums() (*HPAMinimumStatus, error)
 	GetPlatformScalingStatus() (*PlatformScalingStatus, error)
 }
 
-// HPAService implémente IHPAService
+// HPAService implements IHPAService
 type HPAService struct {
 	clientset kubernetes.Interface
 }
 
-// NewHPAService crée une nouvelle instance de HPAService
+// NewHPAService creates a new instance of HPAService
 func NewHPAService(clientset kubernetes.Interface) IHPAService {
 	return &HPAService{
 		clientset: clientset,
 	}
 }
 
-// CheckHPAMinimums vérifie si tous les HPA du cluster respectent leurs minimums
+// CheckHPAMinimums checks if all HPAs in the cluster meet their minimums
 func (h *HPAService) CheckHPAMinimums() (*HPAMinimumStatus, error) {
 	ctx := context.Background()
 	result := &HPAMinimumStatus{
@@ -60,62 +60,62 @@ func (h *HPAService) CheckHPAMinimums() (*HPAMinimumStatus, error) {
 		HPAInfos:           []HPAInfo{},
 	}
 
-	// Récupérer tous les HPA
+	// Get all HPAs
 	hpaList, err := h.clientset.AutoscalingV2().HorizontalPodAutoscalers("").List(ctx, metav1.ListOptions{})
 	if err != nil {
-		return nil, fmt.Errorf("erreur lors de la récupération des HPA: %w", err)
+		return nil, fmt.Errorf("error retrieving HPAs: %w", err)
 	}
 
-	// Si aucun HPA, tout est OK
+	// If no HPAs, everything is OK
 	if len(hpaList.Items) == 0 {
 		return result, nil
 	}
 
-	// Vérifier chaque HPA avec l'annotation de minimum de réplicas
+	// Check each HPA with the minimum replicas annotation
 	for _, hpa := range hpaList.Items {
-		// Vérifier si l'annotation de minimum de réplicas est présente
+		// Check if the minimum replicas annotation is present
 		minReplicasStr, hasAnnotation := hpa.ObjectMeta.Annotations[config.Config.AnnotationMinReplicas]
 		if !hasAnnotation || minReplicasStr == "" {
-			continue // Ignorer les HPA sans annotation de minimum
+			continue // Ignore HPAs without the minimum annotation
 		}
 
-		// Convertir l'annotation en entier
+		// Convert the annotation to an integer
 		minReplicasAnnotation, err := strconv.Atoi(minReplicasStr)
 		if err != nil {
-			log.Warnf("Impossible de convertir l'annotation %s en entier pour le HPA %s/%s: %v",
+			log.Warnf("Unable to convert annotation %s to integer for HPA %s/%s: %v",
 				config.Config.AnnotationMinReplicas, hpa.Namespace, hpa.Name, err)
-			continue // Ignorer les HPA avec une annotation invalide
+			continue // Ignore HPAs with invalid annotation
 		}
 
-		// Récupérer le nombre minimum de réplicas configuré dans le HPA
+		// Get the minimum number of replicas configured in the HPA
 		var hpaMinReplicas int
 		if hpa.Spec.MinReplicas != nil {
 			hpaMinReplicas = int(*hpa.Spec.MinReplicas)
 		} else {
-			hpaMinReplicas = 1 // Par défaut, si MinReplicas n'est pas spécifié, c'est 1
+			hpaMinReplicas = 1 // By default, if MinReplicas is not specified, it's 1
 		}
 
-		// Vérifier si le minimum configuré dans le HPA est >= au minimum requis par l'annotation
+		// Check if the minimum configured in the HPA is >= the minimum required by the annotation
 		meetsMinimum := hpaMinReplicas >= minReplicasAnnotation
 
-		// Créer l'info HPA
+		// Create the HPA info
 		hpaInfo := HPAInfo{
-			Namespace:       hpa.Namespace,
-			Name:            hpa.Name,
-			TargetKind:      hpa.Spec.ScaleTargetRef.Kind,
-			TargetName:      hpa.Spec.ScaleTargetRef.Name,
-			HpaMinReplicas:  hpaMinReplicas,
+			Namespace:             hpa.Namespace,
+			Name:                  hpa.Name,
+			TargetKind:            hpa.Spec.ScaleTargetRef.Kind,
+			TargetName:            hpa.Spec.ScaleTargetRef.Name,
+			HpaMinReplicas:        hpaMinReplicas,
 			MinReplicasAnnotation: minReplicasAnnotation,
-			MeetsMinimum:    meetsMinimum,
+			MeetsMinimum:          meetsMinimum,
 		}
 
-		// Ajouter l'info à la liste
+		// Add the info to the list
 		result.HPAInfos = append(result.HPAInfos, hpaInfo)
 
-		// Mettre à jour le statut global
+		// Update the global status
 		if !meetsMinimum {
 			result.AllHPAsMeetMinimum = false
-			log.Warnf("HPA %s/%s: %d réplicas configurés < %d minimum requis (cible: %s/%s)",
+			log.Warnf("HPA %s/%s: %d configured replicas < %d minimum required (target: %s/%s)",
 				hpa.Namespace, hpa.Name, hpaMinReplicas, minReplicasAnnotation, hpa.Spec.ScaleTargetRef.Kind, hpa.Spec.ScaleTargetRef.Name)
 		}
 	}
