@@ -124,12 +124,6 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HPAMinimumStatus'
-        '503':
-          description: 'Some HPAs do not meet their minimums'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/HPAMinimumStatus'
         '500':
           description: 'Internal server error'
           content:
@@ -143,12 +137,6 @@ paths:
       responses:
         '200':
           description: 'The platform is correctly scaled'
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PlatformScalingStatus'
-        '503':
-          description: "The platform is not correctly scaled"
           content:
             application/json:
               schema:
