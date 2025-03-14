@@ -249,12 +249,12 @@ paths:
       summary: Get current prescaling Event
       tags:
       - prescalingevent
-  /api/v1/hpa-check:
+  /api/v1/hpas:
     get:
       consumes:
       - application/json
-      description: Vérifie si tous les HPA du cluster ont au moins le nombre minimum
-        de pods en cours d'exécution
+      description: Checks if all HPAs in the cluster have at least the minimum number
+        of running pods
       produces:
       - application/json
       responses:
@@ -262,15 +262,14 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/services.HPAMinimumStatus'
-      summary: Vérifier si les HPA respectent leurs minimums requis
+      summary: Check if HPAs meet their required minimums
       tags:
       - cluster
-  /api/v1/platform-scaling:
+  /api/v1/hpas/check:
     get:
       consumes:
       - application/json
-      description: Vérifie si la plateforme est correctement scalée et renvoie les
-        détails des HPA
+      description: Checks if the platform is correctly scaled and returns HPA details
       produces:
       - application/json
       responses:
@@ -278,7 +277,7 @@ paths:
           description: OK
           schema:
             $ref: '#/definitions/services.PlatformScalingStatus'
-      summary: Vérifier l'état de scaling de la plateforme
+      summary: Check the platform scaling status
       tags:
       - cluster
 swagger: "2.0"

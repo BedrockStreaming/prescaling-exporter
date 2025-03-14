@@ -242,9 +242,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/hpa-check": {
+        "/api/v1/hpas": {
             "get": {
-                "description": "Vérifie si tous les HPA du cluster ont au moins le nombre minimum de pods en cours d'exécution",
+                "description": "Checks if all HPAs in the cluster have at least the minimum number of running pods",
                 "consumes": [
                     "application/json"
                 ],
@@ -254,7 +254,7 @@ const docTemplate = `{
                 "tags": [
                     "cluster"
                 ],
-                "summary": "Vérifier si les HPA respectent leurs minimums requis",
+                "summary": "Check if HPAs meet their required minimums",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -265,9 +265,9 @@ const docTemplate = `{
                 }
             }
         },
-        "/api/v1/platform-scaling": {
+        "/api/v1/hpas/check": {
             "get": {
-                "description": "Vérifie si la plateforme est correctement scalée et renvoie les détails des HPA",
+                "description": "Checks if the platform is correctly scaled and returns HPA details",
                 "consumes": [
                     "application/json"
                 ],
@@ -277,7 +277,7 @@ const docTemplate = `{
                 "tags": [
                     "cluster"
                 ],
-                "summary": "Vérifier l'état de scaling de la plateforme",
+                "summary": "Check the platform scaling status",
                 "responses": {
                     "200": {
                         "description": "OK",
