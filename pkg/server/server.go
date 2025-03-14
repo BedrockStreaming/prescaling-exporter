@@ -24,12 +24,14 @@ type IServer interface {
 type Server struct {
 	statusHandler handlers.IStatusHandlers
 	eventHandlers handlers.IEventHandlers
+	hpaHandlers   handlers.IHPAHandlers
 }
 
-func NewServer(statusHandler handlers.IStatusHandlers, eventHandlers handlers.IEventHandlers) IServer {
+func NewServer(statusHandler handlers.IStatusHandlers, eventHandlers handlers.IEventHandlers, hpaHandlers handlers.IHPAHandlers) IServer {
 	return &Server{
 		statusHandler: statusHandler,
 		eventHandlers: eventHandlers,
+		hpaHandlers:   hpaHandlers,
 	}
 }
 
@@ -47,6 +49,7 @@ func (s *Server) Initialize() error {
 
 	router.HandleFunc("/status", s.statusHandler.Index)
 
+	// Routes pour les événements de prescaling
 	apiv1 := router.PathPrefix("/api/v1/events").Subrouter()
 	apiv1.HandleFunc("/", s.eventHandlers.List).Methods(http.MethodGet)
 	apiv1.HandleFunc("/", s.eventHandlers.Create).Methods(http.MethodPost)
@@ -54,6 +57,12 @@ func (s *Server) Initialize() error {
 	apiv1.HandleFunc("/{name}", s.eventHandlers.Get).Methods(http.MethodGet)
 	apiv1.HandleFunc("/{name}", s.eventHandlers.Update).Methods(http.MethodPut)
 	apiv1.HandleFunc("/{name}", s.eventHandlers.Delete).Methods(http.MethodDelete)
+
+	// Route pour la vérification des minimums des HPA
+	router.HandleFunc("/api/v1/hpas", s.hpaHandlers.CheckHPAMinimums).Methods(http.MethodGet)
+
+	// Route for checking the platform scaling status
+	router.HandleFunc("/api/v1/hpas/check", s.hpaHandlers.GetPlatformScalingStatus).Methods(http.MethodGet)
 
 	log.Info("Listen on port: ", config.Config.Port)
 
