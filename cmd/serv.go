@@ -37,8 +37,11 @@ var serv = &cobra.Command{
 		time := clock.RealClock{}
 
 		eventService := services.NewEventService(prescalingEvents, time)
+		hpaService := services.NewHPAService(client.Clientset)
+
 		eventHandler := handlers.NewEventHandlers(eventService)
 		statusHandler := handlers.NewStatusHandlers()
+		hpaHandler := handlers.NewHPAHandlers(hpaService)
 
 		collector := exporter.NewPrescalingCollector(
 			prescaling.NewPrescaling(client, eventService),
@@ -46,7 +49,7 @@ var serv = &cobra.Command{
 
 		prometheus.MustRegister(collector)
 
-		return server.NewServer(statusHandler, eventHandler).Initialize()
+		return server.NewServer(statusHandler, eventHandler, hpaHandler).Initialize()
 	},
 }
 
