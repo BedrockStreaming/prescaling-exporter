@@ -120,9 +120,9 @@ func TestHPAHandlers_CheckHPAMinimums(t *testing.T) {
 		handler.CheckHPAMinimums(rr, req)
 
 		// Check the status code
-		if status := rr.Code; status != http.StatusServiceUnavailable {
+		if status := rr.Code; status != http.StatusOK {
 			t.Errorf("handler returned incorrect status code: got %v want %v",
-				status, http.StatusServiceUnavailable)
+				status, http.StatusOK)
 		}
 
 		// Check the response body
@@ -248,9 +248,9 @@ func TestHPAHandlers_GetPlatformScalingStatus(t *testing.T) {
 		handler.GetPlatformScalingStatus(rr, req)
 
 		// Check the status code
-		if status := rr.Code; status != http.StatusServiceUnavailable {
+		if status := rr.Code; status != http.StatusOK {
 			t.Errorf("handler returned incorrect status code: got %v want %v",
-				status, http.StatusServiceUnavailable)
+				status, http.StatusOK)
 		}
 
 		// Check the response body
