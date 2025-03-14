@@ -241,6 +241,52 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/api/v1/hpa-check": {
+            "get": {
+                "description": "Vérifie si tous les HPA du cluster ont au moins le nombre minimum de pods en cours d'exécution",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Vérifier si les HPA respectent leurs minimums requis",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.HPAMinimumStatus"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/platform-scaling": {
+            "get": {
+                "description": "Vérifie si la plateforme est correctement scalée et renvoie les détails des HPA",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "cluster"
+                ],
+                "summary": "Vérifier l'état de scaling de la plateforme",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/services.PlatformScalingStatus"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {
@@ -299,6 +345,54 @@ const docTemplate = `{
                 "start_time": {
                     "type": "string",
                     "example": "20:00:00"
+                }
+            }
+        },
+        "services.HPAInfo": {
+            "type": "object",
+            "properties": {
+                "hpaMinReplicas": {
+                    "type": "integer"
+                },
+                "meetsMinimum": {
+                    "type": "boolean"
+                },
+                "minReplicasAnnotation": {
+                    "type": "integer"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "namespace": {
+                    "type": "string"
+                },
+                "targetKind": {
+                    "type": "string"
+                },
+                "targetName": {
+                    "type": "string"
+                }
+            }
+        },
+        "services.HPAMinimumStatus": {
+            "type": "object",
+            "properties": {
+                "allHPAsMeetMinimum": {
+                    "type": "boolean"
+                },
+                "hpaInfos": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/services.HPAInfo"
+                    }
+                }
+            }
+        },
+        "services.PlatformScalingStatus": {
+            "type": "object",
+            "properties": {
+                "isPlatformScaled": {
+                    "type": "boolean"
                 }
             }
         },

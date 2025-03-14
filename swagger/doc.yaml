@@ -113,6 +113,52 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/v1/hpas:
+    get:
+      operationId: checkHPAMinimums
+      summary: Vérifier si les HPA respectent leurs minimums requis
+      responses:
+        '200':
+          description: 'Tous les HPA respectent leurs minimums'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HPAMinimumStatus'
+        '503':
+          description: 'Certains HPA ne respectent pas leurs minimums'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HPAMinimumStatus'
+        '500':
+          description: 'Erreur interne du serveur'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/hpas/check:
+    get:
+      operationId: getPlatformScalingStatus
+      summary: Vérifier l'état de scaling de la plateforme
+      responses:
+        '200':
+          description: 'La plateforme est correctement scalée'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformScalingStatus'
+        '503':
+          description: "La plateforme n'est pas correctement scalée"
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformScalingStatus'
+        '500':
+          description: 'Erreur interne du serveur'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 #  /api/v1/event:
 #    summary: Get current event
 #    get:
@@ -316,6 +362,47 @@ components:
           format: uri
           description: URI of documentation describing the error.
           maxLength: 2048
+    HPAInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'Nom du HPA'
+        namespace:
+          type: string
+          description: 'Namespace du HPA'
+        currentReplicas:
+          type: integer
+          description: 'Nombre actuel de réplicas'
+        minReplicas:
+          type: integer
+          description: 'Nombre minimum de réplicas requis'
+        meetsMinimum:
+          type: boolean
+          description: 'Indique si le HPA respecte le minimum requis'
+        targetKind:
+          type: string
+          description: 'Type de ressource ciblée par le HPA'
+        targetName:
+          type: string
+          description: 'Nom de la ressource ciblée par le HPA'
+    HPAMinimumStatus:
+      type: object
+      properties:
+        allHPAsMeetMinimum:
+          type: boolean
+          description: 'Indique si tous les HPA respectent leurs minimums'
+        hpaInfos:
+          type: array
+          description: 'Liste des informations sur les HPA'
+          items:
+            $ref: '#/components/schemas/HPAInfo'
+    PlatformScalingStatus:
+      type: object
+      properties:
+        isPlatformScaled:
+          type: boolean
+          description: 'Indique si la plateforme est correctement scalée'
   parameters:
     name:
       deprecated: false
