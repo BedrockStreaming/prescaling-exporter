@@ -41,6 +41,37 @@ definitions:
         example: "20:00:00"
         type: string
     type: object
+  services.HPAInfo:
+    properties:
+      hpaMinReplicas:
+        type: integer
+      meetsMinimum:
+        type: boolean
+      minReplicasAnnotation:
+        type: integer
+      name:
+        type: string
+      namespace:
+        type: string
+      targetKind:
+        type: string
+      targetName:
+        type: string
+    type: object
+  services.HPAMinimumStatus:
+    properties:
+      allHPAsMeetMinimum:
+        type: boolean
+      hpaInfos:
+        items:
+          $ref: '#/definitions/services.HPAInfo'
+        type: array
+    type: object
+  services.PlatformScalingStatus:
+    properties:
+      isPlatformScaled:
+        type: boolean
+    type: object
   services.PrescalingEventOutput:
     properties:
       date:
@@ -218,4 +249,35 @@ paths:
       summary: Get current prescaling Event
       tags:
       - prescalingevent
+  /api/v1/hpas:
+    get:
+      consumes:
+      - application/json
+      description: Checks if all HPAs in the cluster have at least the minimum number
+        of running pods
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.HPAMinimumStatus'
+      summary: Check if HPAs meet their required minimums
+      tags:
+      - cluster
+  /api/v1/hpas/check:
+    get:
+      consumes:
+      - application/json
+      description: Checks if the platform is correctly scaled and returns HPA details
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/services.PlatformScalingStatus'
+      summary: Check the platform scaling status
+      tags:
+      - cluster
 swagger: "2.0"

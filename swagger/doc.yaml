@@ -113,6 +113,40 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Error'
+  /api/v1/hpas:
+    get:
+      operationId: checkHPAMinimums
+      summary: Check if HPAs meet their required minimums
+      responses:
+        '200':
+          description: 'All HPAs meet their minimums'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HPAMinimumStatus'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /api/v1/hpas/check:
+    get:
+      operationId: getPlatformScalingStatus
+      summary: Check the platform scaling status
+      responses:
+        '200':
+          description: 'The platform is correctly scaled'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PlatformScalingStatus'
+        '500':
+          description: 'Internal server error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
 #  /api/v1/event:
 #    summary: Get current event
 #    get:
@@ -316,6 +350,47 @@ components:
           format: uri
           description: URI of documentation describing the error.
           maxLength: 2048
+    HPAInfo:
+      type: object
+      properties:
+        name:
+          type: string
+          description: 'HPA name'
+        namespace:
+          type: string
+          description: 'HPA namespace'
+        currentReplicas:
+          type: integer
+          description: 'Current number of replicas'
+        minReplicas:
+          type: integer
+          description: 'Minimum number of required replicas'
+        meetsMinimum:
+          type: boolean
+          description: 'Indicates if the HPA meets the required minimum'
+        targetKind:
+          type: string
+          description: 'Type of resource targeted by the HPA'
+        targetName:
+          type: string
+          description: 'Name of the resource targeted by the HPA'
+    HPAMinimumStatus:
+      type: object
+      properties:
+        allHPAsMeetMinimum:
+          type: boolean
+          description: 'Indicates if all HPAs meet their minimums'
+        hpaInfos:
+          type: array
+          description: 'List of information about HPAs'
+          items:
+            $ref: '#/components/schemas/HPAInfo'
+    PlatformScalingStatus:
+      type: object
+      properties:
+        isPlatformScaled:
+          type: boolean
+          description: 'Indicates if the platform is correctly scaled'
   parameters:
     name:
       deprecated: false
