@@ -43,12 +43,6 @@ func (h *HPAHandlers) CheckHPAMinimums(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	// If all HPAs don't meet their minimums, return a 200 OK status
-	if !status.AllHPAsMeetMinimum {
-		utils.WriteResponse(w, http.StatusOK, status)
-		return
-	}
-
 	utils.WriteResponse(w, http.StatusOK, status)
 }
 
