@@ -63,10 +63,5 @@ func (h *HPAHandlers) GetPlatformScalingStatus(w http.ResponseWriter, r *http.Re
 	}
 
 	// If the platform is not correctly scaled, return a 200 OK status
-	if !status.IsPlatformScaled {
-		utils.WriteResponse(w, http.StatusOK, status)
-		return
-	}
-
 	utils.WriteResponse(w, http.StatusOK, status)
 }
