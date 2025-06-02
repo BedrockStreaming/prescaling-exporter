@@ -134,7 +134,7 @@ func (e *PrescalingEventService) Update(prescalingevent *v1.PrescalingEvent) (*P
 		PrescalingEventSpec: v1.PrescalingEventSpec{
 			Date:        event.Spec.Date,
 			StartTime:   event.Spec.StartTime,
-			EndTime:     event.Spec.EndTime,
+			EndTime:     event.Spec.EndTime,	
 			Multiplier:  event.Spec.Multiplier,
 			Description: event.Spec.Description,
 		},
@@ -149,7 +149,7 @@ func (e *PrescalingEventService) Current() (*PrescalingEventOutput, error) {
 		return nil, err
 	}
 
-	filtered := filter(events.Items, func(event v1.PrescalingEvent) bool {
+		filtered := filter(events.Items, func(event v1.PrescalingEvent) bool {
 		date := e.clock.Now().Format("2006-01-02")
 
 		start, _ := utils.SetTime(event.Spec.StartTime, e.clock.Now())

@@ -16,18 +16,25 @@ spec:
           properties:
             spec:
               type: object
-              required: ["date", "start_time", "end_time",  "multiplier", "description"]
+              required: ["date", "start_time", "end_time", "multiplier", "description"]
               properties:
                 date:
                   type: string
+                  example: "2022-05-25"
                 start_time:
                   type: string
+                  format: date-time
+                  example: "2022-05-25T20:00:00+02:00" # RFC3339 format, can be "20:00:00" too
                 end_time:
                   type: string
+                  format: date-time
+                  example: "2022-05-25T23:59:59+02:00" # RFC3339 format, can be "23:59:59" too
                 multiplier:
                   type: integer
+                  example: 2
                 description:
                   type: string
+                  example: "a good description"
   scope: Namespaced
   names:
     plural: prescalingevents
