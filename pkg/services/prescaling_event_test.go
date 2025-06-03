@@ -17,7 +17,7 @@ import (
 
 func TestNewEventService(t *testing.T) {
 
-	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.Now().Local().Location()))
+	fakeClock := testclock.NewFakeClock(time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC))
 	fakePrescalingEvents := &fake.FakePrescalingEvents{}
 
 	type args struct {
@@ -51,8 +51,7 @@ func TestNewEventService(t *testing.T) {
 }
 
 func TestPrescalingEventService_Current(t *testing.T) {
-	loc, _ := time.LoadLocation("Europe/Paris")
-	fakeClock := testclock.NewFakeClock(time.Date(2022, time.July, 2, 23, 0, 1, 0, loc))
+	fakeClock := testclock.NewFakeClock(time.Date(2022, time.July, 2, 23, 0, 1, 0, time.UTC))
 
 	cs := fakeclient.NewSimpleClientset(
 		&v1.PrescalingEvent{

@@ -8,7 +8,7 @@ import (
 )
 
 // SetTime handles both RFC3339 format and legacy simple time format for backward compatibility
-// RFC3339: "2024-01-15T18:30:00+02:00" (preferred)
+// RFC3339: "2024-01-15T18:30:00+02:00" (preferred) - preserves original timezone
 // Legacy: "18:30:00" (assumes UTC)
 func SetTime(timeStr string, now time.Time) (time.Time, error) {
 	// Check if it's RFC3339 format (contains 'T' and timezone info)
@@ -31,7 +31,7 @@ func SetTime(timeStr string, now time.Time) (time.Time, error) {
 		return time.Time{}, fmt.Errorf("the time string is malformed - expected either RFC3339 format or HH:MM:SS format, got: %s", timeStr)
 	}
 
-	// Use UTC for legacy format (backward compatibility)
+	// Use UTC for consistency when no timezone is specified
 	return time.Date(
 		now.Year(), now.Month(), now.Day(),
 		parsedTime.Hour(), parsedTime.Minute(), parsedTime.Second(),
@@ -39,6 +39,11 @@ func SetTime(timeStr string, now time.Time) (time.Time, error) {
 }
 
 func InRangeTime(dateStart time.Time, dateEnd time.Time, now time.Time) bool {
+	// Convert all times to UTC for consistent comparison
+	dateStart = dateStart.UTC()
+	dateEnd = dateEnd.UTC()
+	now = now.UTC()
+
 	if dateEnd.Before(dateStart) {
 		dateEnd = dateEnd.AddDate(0, 0, 1)
 	}
@@ -51,6 +56,10 @@ func InRangeTime(dateStart time.Time, dateEnd time.Time, now time.Time) bool {
 }
 
 func DaysBetweenDates(todayDate time.Time, eventDate time.Time) int {
+	// Convert both dates to UTC for accurate day calculation
+	todayDate = todayDate.UTC()
+	eventDate = eventDate.UTC()
+
 	if todayDate.After(eventDate) {
 		days := todayDate.Sub(eventDate).Hours() / 24
 		return int(days)

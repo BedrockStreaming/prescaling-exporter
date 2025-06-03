@@ -7,11 +7,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-var loc = time.Now().Local().Location()
+// Utiliser UTC au lieu de Local pour éviter les problèmes de fuseaux horaires
+var loc = time.UTC
 
 func TestSetTime(t *testing.T) {
 
-	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, loc)
+	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		name         string
@@ -21,12 +22,12 @@ func TestSetTime(t *testing.T) {
 		{
 			name:         "OK - Test 1",
 			dateStr:      "10:00:00",
-			dateExpected: time.Date(2022, time.March, 2, 10, 0, 0, 0, loc),
+			dateExpected: time.Date(2022, time.March, 2, 10, 0, 0, 0, time.UTC),
 		},
 		{
 			name:         "OK - Test 2",
 			dateStr:      "00:00:00",
-			dateExpected: time.Date(2022, time.March, 2, 0, 0, 0, 0, loc),
+			dateExpected: time.Date(2022, time.March, 2, 0, 0, 0, 0, time.UTC),
 		},
 	}
 
@@ -38,7 +39,7 @@ func TestSetTime(t *testing.T) {
 
 func TestSetTimeError(t *testing.T) {
 
-	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, loc)
+	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		name    string
@@ -78,7 +79,7 @@ func TestSetTimeError(t *testing.T) {
 
 func TestInRangeTime(t *testing.T) {
 
-	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, loc)
+	faketime := time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC)
 
 	testCases := []struct {
 		expected  bool
@@ -88,38 +89,38 @@ func TestInRangeTime(t *testing.T) {
 	}{
 		{
 			name:      "OK - is inside the period ",
-			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 22, 0, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 22, 0, 0, 0, time.UTC),
 			expected:  true,
 		},
 		{
 			name:      "OK - dateStart and time.Now is Equal",
-			dateStart: time.Date(2022, time.March, 2, 21, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 22, 0, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 22, 0, 0, 0, time.UTC),
 			expected:  true,
 		},
 		{
 			name:      "OK - dateEnd and time.Now is Equal",
-			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 21, 0, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 21, 0, 0, 0, time.UTC),
 			expected:  true,
 		},
 		{
 			name:      "OK - dateEnd is after midnight",
-			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 0, 30, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 20, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 0, 30, 0, 0, time.UTC),
 			expected:  true,
 		},
 		{
 			name:      "KO - dateStart and dateEnd is inverted",
-			dateStart: time.Date(2022, time.March, 2, 22, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 0, 30, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 22, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 0, 30, 0, 0, time.UTC),
 			expected:  false,
 		},
 		{
 			name:      "KO - is outside the period",
-			dateStart: time.Date(2022, time.March, 2, 19, 0, 0, 0, loc),
-			dateEnd:   time.Date(2022, time.March, 2, 20, 30, 0, 0, loc),
+			dateStart: time.Date(2022, time.March, 2, 19, 0, 0, 0, time.UTC),
+			dateEnd:   time.Date(2022, time.March, 2, 20, 30, 0, 0, time.UTC),
 			expected:  false,
 		},
 	}
@@ -140,32 +141,32 @@ func TestDaysBetweenDates(t *testing.T) {
 	}{
 		{
 			name:      "OK - 10d8h",
-			today:     time.Date(2022, time.March, 13, 20, 0, 0, 0, loc),
-			eventDate: time.Date(2022, time.March, 2, 22, 0, 0, 0, loc),
+			today:     time.Date(2022, time.March, 13, 20, 0, 0, 0, time.UTC),
+			eventDate: time.Date(2022, time.March, 2, 22, 0, 0, 0, time.UTC),
 			expected:  10,
 		},
 		{
 			name:      "OK - 9d,8h",
-			today:     time.Date(2022, time.March, 12, 20, 0, 0, 0, loc),
-			eventDate: time.Date(2022, time.March, 2, 22, 0, 0, 0, loc),
+			today:     time.Date(2022, time.March, 12, 20, 0, 0, 0, time.UTC),
+			eventDate: time.Date(2022, time.March, 2, 22, 0, 0, 0, time.UTC),
 			expected:  9,
 		},
 		{
 			name:      "OK - 10d,1h",
-			today:     time.Date(2022, time.March, 12, 20, 0, 0, 0, loc),
-			eventDate: time.Date(2022, time.March, 2, 19, 0, 0, 0, loc),
+			today:     time.Date(2022, time.March, 12, 20, 0, 0, 0, time.UTC),
+			eventDate: time.Date(2022, time.March, 2, 19, 0, 0, 0, time.UTC),
 			expected:  10,
 		},
 		{
 			name:      "OK - 10d,1h",
-			today:     time.Date(2022, time.March, 2, 20, 0, 0, 0, loc),
-			eventDate: time.Date(2022, time.March, 12, 19, 0, 0, 0, loc),
+			today:     time.Date(2022, time.March, 2, 20, 0, 0, 0, time.UTC),
+			eventDate: time.Date(2022, time.March, 12, 19, 0, 0, 0, time.UTC),
 			expected:  0,
 		},
 		{
 			name:      "OK - 10d,1h",
-			today:     time.Date(2022, time.March, 2, 20, 0, 0, 0, loc),
-			eventDate: time.Date(2022, time.March, 2, 19, 0, 0, 0, loc),
+			today:     time.Date(2022, time.March, 2, 20, 0, 0, 0, time.UTC),
+			eventDate: time.Date(2022, time.March, 2, 19, 0, 0, 0, time.UTC),
 			expected:  0,
 		},
 	}
